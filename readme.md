@@ -1,9 +1,7 @@
 # Dishook (Beta)
-Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? 
+Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? Or even better, are you tired wasting time because of going to that one file you have to run your webhook?
 
-Or even better, are you tired wasting time because of going to that one file you have to run your webhook?
-
-Well, now you don't need to worry about that.
+Well, now you don't need to worry about that!
 
 Dishook can send your messages thru webhook on a command-line! Just give it the webhook link, 
 the message you wish and profit!
