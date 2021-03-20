@@ -3,19 +3,28 @@ import sys
 import ctypes
 from platform import system as platform
 
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
-
 if platform() == 'Windows':
-    if is_admin():
-        dst = os.environ['WINDIR']
+    # Windows Installation
+
+    isAdmin = ctypes.windll.shell32.IsUserAnAdmin()
+    if isAdmin:
+        # Has admin privilages
+        print("Installing...")
         os.popen('copy dishook.exe %WINDIR%')
+
+        print("Installed! To run it, run dishook on your terminal.")
+        print("If you want to uninstall it, please refer to %s." % (os.environ['WINDIR']))
         os.system('pause')
-    else:
-        print(sys.argv)
+    else: 
+        # No admin privilages
+        print("No admin privilages detected. ")
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
-else: # unix
+
+else: # Unix Installation
+    
+    print("Installing...")
     os.system('sudo cp dishook /usr/bin')
+        print("Installed! To run it, run dishook on your terminal.")
+        print("If you want to uninstall it, please refer to /usr/bin")
+
+# the way these messages are written is temporal. will change it whenever i can
