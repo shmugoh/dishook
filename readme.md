@@ -1,12 +1,8 @@
 # Dishook (Beta)
-Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? 
+Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? Or even better, are you tired wasting time because of going to that one file you have to run your webhook? Well, now you don't need to worry about that.
 
-Or even better, are you tired wasting time because of going to that one file you have to run your webhook?
-
-Well, now you don't need to worry about that.
-
-Dishook can send your messages thru webhook on a command-line! Just give it the webhook link, 
-the message you wish and profit!
+Dishook send discord webhook messages as a command-line argument! Just give it the webhook link, 
+the message you wish, and profit!
 
 It saves you a lot of time. Instead of downloading a programming language, installing the correct libraries, 
 copying and pasting code, then trying to fix it, you could just use this instead.
@@ -64,13 +60,26 @@ Open a new command-line window, and type in like this:
 dishook https://discord.com/api/webhooks/.../.../ Hello World!
 ```
 
-### As any other command-line program, will arguments be implemented!
+### Help! First phrase of my message only gets sent.
+
+Put your messages in quotes, like this:
+```bash
+dishook https://discord.com/api/webhooks/.../.../ "Hello World!"
+```
+
+### As any other command-line program, will arguments be implemented?
 
 Yep! If you wanna know which arguments will be implemented, refer to Projects.
 
 ### Why is the installer written in Python instead of Golang?
 
 It's something personal. I wanna test having different programming languages in a single project.
+
+### There's a lot of names out there and you choosed Dishook, even if there's a lot of projects with that name. Why?
+
+Because this name fits perfectly for a command-line argument. Typing `discordwebhook` takes a lot of
+time and looks weird. Also, typing in an original but complicated name is hard to remember.
+My point is, Dishook is easily rememerable and takes less time to write.
 
 # Contributing
 
