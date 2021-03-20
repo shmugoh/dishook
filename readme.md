@@ -1,4 +1,4 @@
-# Dishook
+# Dishook (Beta)
 Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? 
 Well, now you don't need to worry about that.
 
@@ -15,5 +15,4 @@ For the nerds: This is written in Golang. Installer is written in Python.
 WIP
 
 # License
-MIT (link soon:tm:)
-
+[MIT](https://raw.githubusercontent.com/juanpisuribe13/Dishook/main/LICENSE)
