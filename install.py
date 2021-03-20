@@ -24,7 +24,7 @@ else: # Unix Installation
     
     print("Installing...")
     os.system('sudo cp dishook /usr/bin')
-        print("Installed! To run it, run dishook on your terminal.")
-        print("If you want to uninstall it, please refer to /usr/bin")
+    print("Installed! To run it, run dishook on your terminal.")
+    print("If you want to uninstall it, please refer to /usr/bin")
 
 # the way these messages are written is temporal. will change it whenever i can
