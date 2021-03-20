@@ -14,12 +14,13 @@ func main() {
 	argsLen := len(os.Args)
 
 	if argsLen == 1 {
-		fmt.Println("Please insert the webhook link then the message you want and try again.")
+		fmt.Println("Please insert the webhook link, the message and try again.")
+		fmt.Println("Example: dishook https://discord.com/api/webhooks/.../.../ Message-Goes-Here")
 		os.Exit(0)
 		// Checks if there's no URL in first argument
 	}
 	if argsLen == 2 {
-		fmt.Println("Please put in the message you want and try again.")
+		fmt.Println("Please put in the message and try again.")
 		os.Exit(0)
 		// Check if there's no content in second+ argument
 	}
@@ -36,10 +37,10 @@ func main() {
 	msgBuf = strings.TrimSpace(msgBuf)
 
 	// Sends request to webhook
-	getToken(url, msgBuf)
+	sendMsg(url, msgBuf)
 }
 
-func getToken(url string, content string) {
+func sendMsg(url string, content string) {
 	values := map[string]string{"content": content}
 	jsonValue, _ := json.Marshal(values)
 	// Turns content string into JSON
