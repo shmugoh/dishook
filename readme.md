@@ -1,4 +1,4 @@
-# Dishook
+# Dishook (Beta)
 Are you tired of setting up a lot of stuff you don't even know about just to mess up with Discord's webhook? 
 Well, now you don't need to worry about that.
 
