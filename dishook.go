@@ -16,14 +16,16 @@ func main() {
 	msg := os.Args[2:]
 
 	if argsLen == 1 {
-		panic("Please provide webhook link, the message and try again." +
-			  "Example: dishook https://discord.com/api/webhooks/.../.../ Hello World!")
 		// Checks if there's no URL in first argument
+		fmt.Println("Please provide webhook link, the message and try again." +
+			  "Example: dishook https://discord.com/api/webhooks/.../.../ Hello World!")
+		os.Exit(0)
 	}
 	if argsLen == 2 {
-		isDiscordLink(url)
-		panic("Please put in the message and try again.")
 		// Check if there's no content in second+ argument
+		isDiscordLink(url) // why not
+		fmt.Println("Please put in the message and try again.")
+		os.Exit(0)
 	}
 
 	// Checks if webhook is valid and has no errors whatsoever.
@@ -62,8 +64,10 @@ func isDiscordLink(url string) bool {
 	if url[0:33] == "https://discord.com/api/webhooks/" {
 		return true
 	} else {
-		panic("Please provide a valid webhook URL and try again.")
+		fmt.Println("Please provide a valid webhook URL and try again.")
+		os.Exit(0)
 	}
+	return false
 }
 
 func isMsgMax(msg string) bool {
@@ -78,9 +82,9 @@ func isMsgMax(msg string) bool {
 		fmt.Printf("Your message's length (%d) surpasses Discord's limit (%d)." +
 		"Please make it %d characters shorter and try again.", 
 		msgLen, msgLimit, msgToShort)
-
-		return true
+		os.Exit(0)
 	}
+	return true
 }
 
 func isTokenInvalid(url string) {
@@ -90,7 +94,8 @@ func isTokenInvalid(url string) {
 
 	url_code := url_r.StatusCode // thank you discord for putting the invalid error in the url's status code
 	if url_code == 401 {
-		panic("Invalid Webhook Token. Please try again")
+		fmt.Println("Invalid Webhook Token. Please try again")
+		os.Exit(0)
 	}
 }
 
