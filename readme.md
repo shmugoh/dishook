@@ -15,5 +15,4 @@ For the nerds: This is written in Golang. Installer is written in Python.
 WIP
 
 # License
-MIT (link soon:tm:)
-
+[MIT](https://raw.githubusercontent.com/juanpisuribe13/Dishook/main/LICENSE)
