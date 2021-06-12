@@ -28,6 +28,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   " dishook [url] [message]\nor dishook [url]",
 	Short: "CLI webhook runner for Discord.",
+	Args:  cobra.MinimumNArgs(2),
 	// Long: maybe i won't use it, but i'll leave it here just in case
 
 	Run: func(cmd *cobra.Command, args []string) {
@@ -37,16 +38,9 @@ var rootCmd = &cobra.Command{
 		if isTokenValid == false {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
-		// fmt.Println(url)
 
-		// Process message argument
-		var msg string
-		msgArgLocation := 1
-		for i := msgArgLocation; i < len(args); i++ {
-			msg = msg + " " + args[i]
-		}
-		msg = strings.TrimSpace(msg)
-		sendMsg(url, msg)
+		content := getContent(args, 1)
+		sendMsg(url, content)
 	},
 }
 
@@ -58,6 +52,15 @@ func Execute() {
 }
 
 // functions time
+
+func getContent(args []string, arg_location int) string {
+	var msg string
+	for i := arg_location; i < len(args); i++ {
+		msg = msg + " " + args[i]
+	}
+	msg = strings.TrimSpace(msg)
+	return msg
+}
 
 func sendMsg(url string, content string) {
 	values := map[string]string{"content": content}
