@@ -28,7 +28,7 @@ func init() {
 var deleteCmd = &cobra.Command{
 	Use:   "delete [URL] [message-id]",
 	Short: "Removes previously-sent webhook message.",
-	Args:  cobra.MaximumNArgs(2),
+	Args:  cobra.ExactArgs(2),
 	// Long: maybe i won't use it, but i'll leave it here just in case
 
 	Run: func(cmd *cobra.Command, args []string) {
