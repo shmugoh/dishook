@@ -18,12 +18,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/jochasinga/requests"
 	"github.com/spf13/cobra"
 )
 
 func init() {
+	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you want to send.")
+
 	rootCmd.AddCommand(editCmd)
 }
 
@@ -38,16 +41,38 @@ var editCmd = &cobra.Command{
 		url := args[0]
 		message_id := args[1]
 		url = url + "/messages/" + message_id
+		flags := []string{message}
 
 		isTokenValid := isTokenValid(url)
 		if isTokenValid == false {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
 
+		for i := 0; i < len(flags); i++ { // checks if flags are used
+			if len(flags[i]) != 0 {
+				if len(message) == 0 {
+					fmt.Printf("ERROR: Message flag required.")
+					os.Exit(0)
+				}
+
+				values := map[string]string{
+					"content": message,
+				}
+
+				jsonValue, _ := json.Marshal(values)
+				fmt.Println(bytes.NewBuffer(jsonValue))
+				resp, err := requests.Patch(url, "application/json", bytes.NewBuffer(jsonValue))
+				fmt.Print(resp)
+				manageError(err)
+				os.Exit(0)
+			} else {
+				continue
+			}
+		}
+
 		content := getContent(args, 2)
 		values := map[string]string{"content": content}
 		jsonValue, _ := json.Marshal(values)
-		// Turns content string into JSON
 
 		resp, err := requests.Patch(url, "application/json", bytes.NewBuffer(jsonValue))
 		fmt.Print(resp)
