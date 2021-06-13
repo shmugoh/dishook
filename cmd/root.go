@@ -19,36 +19,76 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/jochasinga/requests"
 	"github.com/spf13/cobra"
 )
 
+// flags
+var (
+	avatar_url string
+	username   string
+	message    string
+	tts        bool
+)
+
+func init() {
+	rootCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture.")
+	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you want to send.")
+	rootCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook.")
+	rootCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not.")
+}
+
 var rootCmd = &cobra.Command{
 	Use:   " dishook [url] [message]\nor dishook [url]",
 	Short: "CLI webhook runner for Discord.",
-	Args:  cobra.MinimumNArgs(2),
+	Args:  cobra.ArbitraryArgs,
+	// Args:  cobra.MinimumNArgs(2),
 	// Long: maybe i won't use it, but i'll leave it here just in case
 
 	Run: func(cmd *cobra.Command, args []string) {
 		url := args[0]
+		flags := []string{avatar_url, username, message}
 
 		isTokenValid := isTokenValid(url)
 		if isTokenValid == false {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
 
+		// If flags are used
+		for i := 0; i < len(flags); i++ {
+			if len(flags[i]) != 0 {
+				if len(message) == 0 {
+					fmt.Printf("ERROR: Message flag required.")
+					os.Exit(0)
+				}
+
+				tts := strconv.FormatBool(tts)
+				values := map[string]string{
+					"content":    message,
+					"username":   username,
+					"avatar_url": avatar_url,
+					"tts":        tts,
+				}
+
+				jsonValue, _ := json.Marshal(values)
+				fmt.Println(bytes.NewBuffer(jsonValue))
+				resp, err := requests.Post(url, "application/json", bytes.NewBuffer(jsonValue))
+				fmt.Print(resp)
+				manageError(err)
+				os.Exit(0)
+			} else {
+				continue
+			}
+		}
+
+		// If flags ARE NOT used
 		content := getContent(args, 1)
 		sendMsg(url, content)
+		// sendMsg(url, content)
 	},
-}
-
-func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
 }
 
 // functions time
@@ -119,5 +159,12 @@ func manageError(err error) {
 		fmt.Println("An unexpected error ocurred. Please try again.")
 		fmt.Println("For more information:")
 		panic(err)
+	}
+}
+
+func Execute() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 }
