@@ -13,7 +13,7 @@ copying and pasting code, then trying to fix it, you could run a simple command 
 
 **3.** Move the executable to your operating system's PATH. For Windows, it is C:\Windows. For Linux, /usr/bin.
 
-However, if you're on Windows and you don't feel comfortable moving it to your system folder, open cmd, run `set PATH` and 
+**3.1.** If you're on Windows and don't feel comfortable moving it to your system folder, open cmd, run `set PATH` and 
 pick which folder you're comfortable putting it on.
 
 **4.** Done!
@@ -34,9 +34,8 @@ Yep! If you wanna know which arguments/flags will be implemented, refer to Proje
 
 ### There's a lot of names out there and you choosed Dishook, even if there's a lot of projects with that name. Why?
 
-Because this name fits perfectly for a command-line argument. Typing `discordwebhook` takes a lot of
-time and looks weird. Also, typing in an original but complicated name is hard to remember.
-My point is, Dishook is easily rememerable and takes less time to write.
+Dishook fits perfectly for a CLI argument/app. Typing something like `discordwebhook` takes a lot of
+time and looks weird. Dishook is easier to remember and takes less time to write.
 
 # Contributing
 
