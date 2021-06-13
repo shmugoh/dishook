@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.1.0-alpha] - 2021-06-11 (alpha record)
+## [2.2.0-alpha] - 2021-06-12 (alpha record)
+### Added
+- Flags have been added. Flags let the user customize their message (for execute and edit), and obtain transparent information about their webhook's message.
+    - For root (execute): avatar-url, message, username, and tts.
+    - For edit: message
+    - For get: attachments, author, avatar-url, bot, id, username, channel-id, content, embeds, id, mention_everyone, mention_roles, mentions, pinned, tts, and webhook_id
+
+### Changed
+- Delete command now requires 2 exact arguments instead of maximum 2 args.
+
+## [2.1.0-alpha] - 2021-06-11
 ### Added
 - Delete, edit, and get webhook functions have been implemented.
 - Function to process the message flag has been implemented
