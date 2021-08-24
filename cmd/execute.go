@@ -35,7 +35,7 @@ var (
 
 func init() {
 	rootCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture.")
-	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you want to send.")
+	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send.")
 	rootCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook.")
 	rootCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not.")
 	rootCmd.AddCommand(executeCmd)
