@@ -50,33 +50,33 @@ var (
 )
 
 func init() {
-	// author:map
-	getCmd.Flags().BoolVarP(&hasAvatarUrl, "avatar-url", "a", false, "Returns obtained webhook's avatar URL.")
-	getCmd.Flags().BoolVarP(&isBot, "bot", "b", false, "Returns if obtained webhook is bot. (lol)") // you gotta make it detailed for a cli app!
-	getCmd.Flags().BoolVarP(&discriminator, "discriminator", "d", false, "Returns webhook's discriminator.")
-	getCmd.Flags().BoolVarP(&author_id, "author-id", "", false, "Returns the id of the webhook.")
-	getCmd.Flags().BoolVarP(&username_content, "username", "u", false, "Returns the name used for the webhook.")
+	// json info | author:map
+	getCmd.Flags().BoolVarP(&hasAvatarUrl, "avatar-url", "a", false, "Avatar URL of the webhook")
+	getCmd.Flags().BoolVarP(&isBot, "bot", "b", false, "Returns if obtained webhook is bot") // you gotta make it transparent if it's a cli app!
+	getCmd.Flags().BoolVarP(&discriminator, "discriminator", "d", false, "Webhook's discriminator")
+	getCmd.Flags().BoolVarP(&author_id, "author-id", "", false, "ID of webhook")
+	getCmd.Flags().BoolVarP(&username_content, "username", "u", false, "Name used for the webhook")
 
 	// message info
-	getCmd.Flags().BoolVarP(&message_content, "message", "m", false, "Returns the message. (set to default if no flags are used.)")
-	getCmd.Flags().BoolVarP(&message_id, "message-id", "s", false, "Returns the message id.")
-	getCmd.Flags().BoolVarP(&channel_id, "channel-id", "c", false, "Returns the channel id.")
+	getCmd.Flags().BoolVarP(&message_content, "message", "m", false, "Message sent (set to default if no flags are used)")
+	getCmd.Flags().BoolVarP(&message_id, "message-id", "s", false, "Message ID")
+	getCmd.Flags().BoolVarP(&channel_id, "channel-id", "c", false, "Channel ID")
 
-	getCmd.Flags().BoolVarP(&mentionsEveryone, "mentions-everyone", "e", false, "Returns if everyone is mentioned.")
+	getCmd.Flags().BoolVarP(&mentionsEveryone, "mentions-everyone", "e", false, "Returns if everyone is mentioned")
 	getCmd.Flags().BoolVarP(&mentionsRoles, "mention-roles", "r", false, "Returns if roles are mentioned")
-	getCmd.Flags().BoolVarP(&isPinned, "pinned", "p", false, "Returns if message is pinned.")
-	getCmd.Flags().BoolVarP(&timestamp, "timestamp", "", false, "Returns the time message was sent.")
-	getCmd.Flags().BoolVarP(&hasTTS, "tts", "t", false, "Returns if TTS was used.")
+	getCmd.Flags().BoolVarP(&isPinned, "pinned", "p", false, "Returns if message is pinned")
+	getCmd.Flags().BoolVarP(&timestamp, "timestamp", "", false, "Returns the time message was sent")
+	getCmd.Flags().BoolVarP(&hasTTS, "tts", "t", false, "Returns if TTS was used")
 
-	// webhook details
-	getCmd.Flags().BoolVarP(&webhook_id, "webhook-id", "", false, "Returns the webhook's id.")
-	getCmd.Flags().BoolVarP(&wh_type, "webhook-type", "", false, "Returns the webhook type.")
+	// webhook info
+	getCmd.Flags().BoolVarP(&webhook_id, "webhook-id", "", false, "Webhook's ID")
+	getCmd.Flags().BoolVarP(&wh_type, "webhook-type", "", false, "Webhook type")
 
 	// misc
-	getCmd.Flags().BoolVarP(&components, "components", "", false, "Returns the components included with the message.")
-	getCmd.Flags().BoolVarP(&edited_timestamp, "edited-timestamp", "", false, "Returns the time the message was edited.")
-	getCmd.Flags().BoolVarP(&embeds, "embeds", "", false, "Returns the array of message components.")
-	getCmd.Flags().BoolVarP(&flags, "flags", "", false, "Returns the name used for the webhook")
+	getCmd.Flags().BoolVarP(&components, "components", "", false, "Components included with the message")
+	getCmd.Flags().BoolVarP(&edited_timestamp, "edited-timestamp", "", false, "Time when message was edited")
+	getCmd.Flags().BoolVarP(&embeds, "embeds", "", false, "Array of message embeds/components")
+	getCmd.Flags().BoolVarP(&flags, "flags", "", false, "Name of the webhook")
 
 	// what the hell
 
@@ -85,7 +85,7 @@ func init() {
 
 var getCmd = &cobra.Command{
 	Use:   "get [URL] [message-id]",
-	Short: "Returns previously-sent webhook message as default (or one param if a flag is used).",
+	Short: "Returns a previously-sent message (or an argument if a flag is used)",
 	Args:  cobra.MinimumNArgs(2),
 	// MaximumArgs: cobra.MaximumNArgs(3),
 	// Long: maybe i won't use it, but i'll leave it here just in case
@@ -112,7 +112,7 @@ var getCmd = &cobra.Command{
 
 		isTokenValid := isTokenValid(url)
 		if isTokenValid == false {
-			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
+			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
 
 		resp_json, err := requests.Get(url)

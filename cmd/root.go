@@ -26,11 +26,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   " dishook [url] [message]\nor dishook [url]",
-	Short: "CLI webhook runner for Discord.",
-	Args:  cobra.ArbitraryArgs,
-	// Args:  cobra.MinimumNArgs(2),
-	// Long: maybe i won't use it, but i'll leave it here just in case
+	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
+	Args: cobra.MinimumNArgs(2),
+
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Help()

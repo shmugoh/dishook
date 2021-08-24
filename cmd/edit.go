@@ -25,14 +25,14 @@ import (
 )
 
 func init() {
-	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit.")
+	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit")
 
 	rootCmd.AddCommand(editCmd)
 }
 
 var editCmd = &cobra.Command{
 	Use:   "edit [URL] [message-id]",
-	Short: "Edits a sent webhook message.",
+	Short: "Edits a sent webhook message",
 	Args:  cobra.MinimumNArgs(2),
 	// MaximumArgs: cobra.MaximumNArgs(3),
 	// Long: maybe i won't use it, but i'll leave it here just in case

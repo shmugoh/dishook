@@ -34,16 +34,16 @@ var (
 )
 
 func init() {
-	rootCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture.")
-	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send.")
-	rootCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook.")
-	rootCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not.")
+	rootCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
+	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
+	rootCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
+	rootCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
 	rootCmd.AddCommand(executeCmd)
 }
 
 var executeCmd = &cobra.Command{
-	Use:   "execute [URL] [message]",
-	Short: "Executor lol.",
+	Use:   "execute [URL] [message]\n  dishook execute [URL]",
+	Short: "Sends the message (with its corresponding flags if called)",
 	Args:  cobra.MinimumNArgs(2),
 
 	Run: func(cmd *cobra.Command, args []string) {
