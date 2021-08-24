@@ -25,7 +25,7 @@ import (
 )
 
 func init() {
-	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you want to send.")
+	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit.")
 
 	rootCmd.AddCommand(editCmd)
 }
