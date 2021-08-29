@@ -25,25 +25,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var rootCmd = &cobra.Command{
-	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
-	Args: cobra.MinimumNArgs(2),
-
-	PreRunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			cmd.Help()
-			os.Exit(0)
-		}
-		return nil
-	},
-	Run: func(cmd *cobra.Command, args []string) {
-		execute(args)
-	},
-}
-
-// functions time
-
-func getContent(args []string, arg_location int) string {
+// Merges all the strings that start from given argument position into one variable.
+func mergeStrings(args []string, arg_location int) string {
 	var msg string
 	for i := arg_location; i < len(args); i++ {
 		msg = msg + " " + args[i]
@@ -52,17 +35,24 @@ func getContent(args []string, arg_location int) string {
 	return msg
 }
 
-func sendMsg(url string, content string) {
-	values := map[string]string{"content": content}
-	jsonValue, _ := json.Marshal(values)
-	// Turns content string into JSON
+// Does a HTTP request method to Discord's webhook with provided URL and JSON map.
+// Automatically marshalls the JSON map.
+//
+// Supported HTTP Methods: POST, PATCH
+func requestHTTP(HttpMethod string, URL string, JsonMap map[string]string) {
+	jsonValue, _ := json.Marshal(JsonMap)
 
-	resp, err := requests.Post(url, "application/json", bytes.NewBuffer(jsonValue))
-	fmt.Print(resp)
-	manageError(err)
-	// Sends request to webhook
+	switch HttpMethod {
+	case "POST":
+		resp, err := requests.Post(URL, "application/json", bytes.NewBuffer(jsonValue))
+		_, _ = resp, err
+	case "PATCH":
+		resp, err := requests.Patch(URL, "application/json", bytes.NewBuffer(jsonValue))
+		_, _ = resp, err
+	}
 }
 
+// Checks if provided URL matches the Discord URL webhook API calling one.
 func isTokenValid(url string) bool {
 	defer func() {
 		if err := recover(); err != nil {
@@ -73,10 +63,8 @@ func isTokenValid(url string) bool {
 
 	if url[0:33] == "https://discord.com/api/webhooks/" {
 		url_r, err := requests.Get(url)
-		manageError(err)
-
 		url_code := url_r.StatusCode
-		if url_code == 401 {
+		if err != nil || url_code == 401 {
 			return false
 		} else {
 			return true
@@ -86,6 +74,7 @@ func isTokenValid(url string) bool {
 	}
 }
 
+// Checks if message argument doesn't pass 2000 characters.
 func isMsgMax(msg string) bool {
 	msgLen := len(msg)
 	msgLimit := 2000 // you never know if discord may change their
@@ -94,22 +83,39 @@ func isMsgMax(msg string) bool {
 	if msgLen < msgLimit {
 		return false
 	} else {
-		msgToShort := msgLen - msgLimit
-		fmt.Printf("Your message's length (%d) surpasses Discord's limit (%d)."+
-			"Please make it %d characters shorter and try again.",
-			msgLen, msgLimit, msgToShort)
-		os.Exit(0)
+		// msgToShort := msgLen - msgLimit
+		// fmt.Printf("Your message's length (%d) surpasses Discord's limit (%d)."+
+		// 	"Please make it %d characters shorter and try again.",
+		// 	msgLen, msgLimit, msgToShort)
+		return true
 	}
-	return true
 }
 
-func manageError(err error) {
+// Panics when an error ocurrs. Only use if no conditionals are being used or if it's a HTTPS request.
+func ManageError(err error) {
 	// just to calm down with the syntax
 	if err != nil {
 		fmt.Println("An unexpected error ocurred. Please try again.")
 		fmt.Println("For more information:")
 		panic(err)
 	}
+}
+
+// Cobra stuff
+
+var rootCmd = &cobra.Command{
+	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
+	Args: cobra.MinimumNArgs(2),
+
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		if len(args) == 0 {
+			cmd.Help()
+		}
+		return nil
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		execute(args)
+	},
 }
 
 func Execute() {

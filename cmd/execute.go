@@ -15,13 +15,10 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
 
-	"github.com/jochasinga/requests"
 	"github.com/spf13/cobra"
 )
 
@@ -54,41 +51,47 @@ var executeCmd = &cobra.Command{
 func execute(args []string) {
 	url := args[0]
 	flags := []string{avatar_url, username, message}
-
-	isTokenValid := isTokenValid(url)
-	if isTokenValid == false {
+	if !isTokenValid(url) {
 		fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 	}
 
-	// If flags are used
+	// Flags zone
 	for i := 0; i < len(flags); i++ {
 		if len(flags[i]) != 0 {
 			if len(message) == 0 {
-				fmt.Printf("ERROR: Message flag required.")
+				fmt.Println("ERROR: Message flag required.")
 				os.Exit(0)
 			}
+			if isMsgMax(message) {
+				fmt.Println("ERROR: Message's length surpasses 2000 characters." +
+					"Please make it shorter and try again.")
+				os.Exit(0)
+			}
+			// TODO: create a handling error script
+			// the one golang provides isn't good ux-wise
 
 			tts := strconv.FormatBool(tts)
-			values := map[string]string{
+			json_map := map[string]string{
 				"content":    message,
 				"username":   username,
 				"avatar_url": avatar_url,
 				"tts":        tts,
 			}
-
-			jsonValue, _ := json.Marshal(values)
-			fmt.Println(bytes.NewBuffer(jsonValue))
-			resp, err := requests.Post(url, "application/json", bytes.NewBuffer(jsonValue))
-			fmt.Print(resp)
-			manageError(err)
-			os.Exit(0)
+			requestHTTP("POST", url, json_map)
 		} else {
 			continue
 		}
 	}
 
-	// If flags ARE NOT used
-	content := getContent(args, 1)
-	sendMsg(url, content)
+	// No flags zone
+	content := mergeStrings(args, 1)
+	if isMsgMax(content) {
+		fmt.Println("Your message's length surpasses 2000 characters." +
+			"Please make it shorter and try again.")
+	} else {
+		json_map := map[string]string{"content": content}
+		requestHTTP("POST", url, json_map)
+	}
+
 	// sendMsg(url, content)
 }

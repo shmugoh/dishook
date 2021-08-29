@@ -38,15 +38,12 @@ var deleteCmd = &cobra.Command{
 		message_id := args[1]
 		url = url + "/messages/" + message_id
 
-		isTokenValid := isTokenValid(url)
-		if isTokenValid == false {
+		if !isTokenValid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
 
 		resp, err := requests.Delete(url)
-		manageError(err)
-
-		if resp.StatusCode == 204 {
+		if err != nil || resp.StatusCode == 204 {
 			fmt.Printf("Message with ID %s has been removed", message_id)
 		} else {
 			fmt.Printf("ERROR: '%s' message ID doesn't exist. Please check if message exists and try again", message_id)

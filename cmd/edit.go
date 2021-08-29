@@ -15,12 +15,9 @@
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 
-	"github.com/jochasinga/requests"
 	"github.com/spf13/cobra"
 )
 
@@ -43,8 +40,7 @@ var editCmd = &cobra.Command{
 		url = url + "/messages/" + message_id
 		flags := []string{message}
 
-		isTokenValid := isTokenValid(url)
-		if isTokenValid == false {
+		if !isTokenValid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
 
@@ -55,27 +51,15 @@ var editCmd = &cobra.Command{
 					os.Exit(0)
 				}
 
-				values := map[string]string{
-					"content": message,
-				}
-
-				jsonValue, _ := json.Marshal(values)
-				fmt.Println(bytes.NewBuffer(jsonValue))
-				resp, err := requests.Patch(url, "application/json", bytes.NewBuffer(jsonValue))
-				fmt.Print(resp)
-				manageError(err)
-				os.Exit(0)
+				json_map := map[string]string{"content": message}
+				requestHTTP("PATCH", url, json_map)
 			} else {
 				continue
 			}
 		}
 
-		content := getContent(args, 2)
-		values := map[string]string{"content": content}
-		jsonValue, _ := json.Marshal(values)
-
-		resp, err := requests.Patch(url, "application/json", bytes.NewBuffer(jsonValue))
-		fmt.Print(resp)
-		manageError(err)
+		content := mergeStrings(args, 2)
+		json_map := map[string]string{"content": content}
+		requestHTTP("PATCH", url, json_map)
 	},
 }

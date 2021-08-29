@@ -17,7 +17,6 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 	"reflect"
 
 	"github.com/jochasinga/requests"
@@ -110,21 +109,20 @@ var getCmd = &cobra.Command{
 		message_id := args[1]
 		url = url + "/messages/" + message_id
 
-		isTokenValid := isTokenValid(url)
-		if isTokenValid == false {
+		if !isTokenValid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
 
 		resp_json, err := requests.Get(url)
-		manageError(err)
+		ManageError(err)
 		var resp_map map[string]interface{}
 		json.Unmarshal([]byte(resp_json.JSON()), &resp_map)
 
-		// Flags
+		// Checks for each flag
 		var i int
 		var isFlagSet bool
 		for i = 0; i < len(flags); i++ {
-			if flags[i] == true {
+			if flags[i] {
 
 				if i >= 0 && i <= 4 {
 					// checks if flag is on map:author
@@ -152,11 +150,9 @@ var getCmd = &cobra.Command{
 		}
 
 		// default if no flag is set
-		if isFlagSet == false {
+		if !isFlagSet {
 			output := resp_map["content"]
 			fmt.Println(output)
-		} else { // unless...
-			os.Exit(0)
 		}
 	},
 }
