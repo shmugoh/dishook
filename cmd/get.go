@@ -132,7 +132,9 @@ var getCmd = &cobra.Command{
 					if output_type == "bool" {
 						output = fmt.Sprintf("%v", output)
 					}
+
 					fmt.Printf("%s: %s\n", flags_var[i], output)
+					isFlagSet = true
 
 				} else {
 					output := resp_map[flags_var[i]]
@@ -140,6 +142,7 @@ var getCmd = &cobra.Command{
 					if output_type == "bool" {
 						output = fmt.Sprintf("%v", output)
 					}
+
 					fmt.Printf("%s: %s\n", flags_var[i], output)
 					isFlagSet = true
 					// lol
