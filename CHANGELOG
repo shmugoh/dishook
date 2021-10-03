@@ -3,7 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-## [0.2.2] - 2021-06-12 (alpha record)
+## [0.2.3] - 2021-10-21
+### Changed
+- Execute command is now independent
+- Internal code cleanup
+
+## [0.2.2] - 2021-06-12
 ### Added
 - Flags have been added. Flags let the user customize their message (for execute and edit), and obtain transparent information about their webhook's message.
     - For root (execute): avatar-url, message, username, and tts.
