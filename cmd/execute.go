@@ -31,10 +31,10 @@ var (
 )
 
 func init() {
-	rootCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
-	rootCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
-	rootCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
-	rootCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
+	executeCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
+	executeCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
+	executeCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
+	executeCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
 	rootCmd.AddCommand(executeCmd)
 }
 
@@ -78,6 +78,7 @@ func execute(args []string) {
 				"tts":        tts,
 			}
 			requestHTTP("POST", url, json_map)
+			os.Exit(0)
 		} else {
 			continue
 		}
