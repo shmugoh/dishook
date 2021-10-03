@@ -123,7 +123,6 @@ var getCmd = &cobra.Command{
 		var isFlagSet bool
 		for i = 0; i < len(flags); i++ {
 			if flags[i] {
-
 				if i >= 0 && i <= 4 {
 					// checks if flag is on map:author
 					resp_map_author := resp_map["author"]
