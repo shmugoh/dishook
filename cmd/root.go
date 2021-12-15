@@ -113,15 +113,15 @@ func merge_strings(args []string, arg_pos int) string {
 // Automatically marshalls the JSON map.
 //
 // Supported HTTP Methods: POST, PATCH
-func request_HTTP(HttpMethod string, URL string, JsonMap map[string]string) {
-	jsonValue, _ := json.Marshal(JsonMap)
+func request_HTTP(http_method string, URL string, json_map map[string]string) {
+	json_value, _ := json.Marshal(json_map)
 
-	switch HttpMethod {
+	switch http_method {
 	case "POST":
-		resp, err := requests.Post(URL, "application/json", bytes.NewBuffer(jsonValue))
+		resp, err := requests.Post(URL, "application/json", bytes.NewBuffer(json_value))
 		_, _ = resp, err
 	case "PATCH":
-		resp, err := requests.Patch(URL, "application/json", bytes.NewBuffer(jsonValue))
+		resp, err := requests.Patch(URL, "application/json", bytes.NewBuffer(json_value))
 		_, _ = resp, err
 	}
 }
@@ -130,6 +130,8 @@ func request_HTTP(HttpMethod string, URL string, JsonMap map[string]string) {
 func is_token_valid(url string) bool {
 	defer func() {
 		if err := recover(); err != nil {
+			// what
+			// i might tickle around and see what this does
 			fmt.Printf("ERROR: '%s' is not a valid webhook URL.", url)
 			os.Exit(0)
 		}
@@ -138,31 +140,24 @@ func is_token_valid(url string) bool {
 	if url[0:33] == "https://discord.com/api/webhooks/" {
 		url_r, err := requests.Get(url)
 		url_code := url_r.StatusCode
-		if err != nil || url_code == 401 {
-			return false
-		} else {
+		if url_code != 401 || err != nil {
 			return true
 		}
-	} else {
-		return false
 	}
+
+	// Passed thru all checks without any true statement
+	return false
 }
 
-// Checks if message argument doesn't pass 2000 characters.
+// Checks if given value doesn't pass set (2000) characters.
 func is_max(msg string) bool {
-	msgLen := len(msg)
 	msgLimit := 2000 // you never know if discord may change their
 	// limit in the near future /shrug
 
-	if msgLen < msgLimit {
+	if len(msg) < msgLimit {
 		return false
-	} else {
-		// msgToShort := msgLen - msgLimit
-		// fmt.Printf("Your message's length (%d) surpasses Discord's limit (%d)."+
-		// 	"Please make it %d characters shorter and try again.",
-		// 	msgLen, msgLimit, msgToShort)
-		return true
 	}
+	return true
 }
 
 // Panics when an error ocurrs. Only use if no conditionals are being used or if it's a HTTPS request.
