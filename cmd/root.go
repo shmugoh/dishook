@@ -98,17 +98,18 @@ func init() {
 	root_cmd.AddCommand(get_cmd, execute_cmd, edit_cmd, delete_cmd)
 }
 
-// Merges all the strings that start from given argument position into one variable.
-func merge_strings(args []string, arg_location int) string {
+// Allocates all strings from array starting from given argument position into one variable.
+//
+// Used when input has no flags set.
+func merge_strings(args []string, arg_pos int) string {
 	var msg string
-	for i := arg_location; i < len(args); i++ {
-		msg = msg + " " + args[i]
+	for i := arg_pos; i < len(args); i++ {
+		msg = fmt.Sprintf("%s %s", msg, args[i])
 	}
-	msg = strings.TrimSpace(msg)
-	return msg
+	return strings.TrimSpace(msg)
 }
 
-// Does a HTTP request method to Discord's webhook with provided URL and JSON map.
+// Semds an HTTP request method to Discord's webhook with provided URL and JSON map.
 // Automatically marshalls the JSON map.
 //
 // Supported HTTP Methods: POST, PATCH
@@ -173,7 +174,6 @@ func ManageError(err error) {
 }
 
 // Cobra stuff
-
 var root_cmd = &cobra.Command{
 	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
 	Args: cobra.MinimumNArgs(2),
