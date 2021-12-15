@@ -29,15 +29,12 @@ var edit_cmd = &cobra.Command{
 	// Long: maybe i won't use it, but i'll leave it here just in case
 
 	Run: func(cmd *cobra.Command, args []string) {
-		url := args[0]
-		message_id := args[1]
-		url = url + "/messages/" + message_id
-		flags := []string{message}
-
+		url := fmt.Sprintf("%s/messages/%s", args[0], args[1])
 		if !is_token_valid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
 
+		flags := []string{message}
 		for i := 0; i < len(flags); i++ { // checks if flags are used
 			if len(flags[i]) != 0 {
 				if len(message) == 0 {

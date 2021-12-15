@@ -22,8 +22,7 @@ import (
 )
 
 func init() {
-	delete_cmd.SetUsageTemplate("\nUsage:\n  delete [URL] [message id]\n") // if i don't use this, usage would end with
-	// [flags], and deletecmd doesn't use them
+	delete_cmd.SetUsageTemplate("\nUsage:\n  delete [URL] [message id]\n")
 }
 
 var delete_cmd = &cobra.Command{
@@ -32,19 +31,16 @@ var delete_cmd = &cobra.Command{
 	Args:  cobra.ExactArgs(2),
 
 	Run: func(cmd *cobra.Command, args []string) {
-		url := args[0]
-		message_id := args[1]
-		url = url + "/messages/" + message_id
-
+		url := fmt.Sprintf("%s/messages/%s", args[0], args[1])
 		if !is_token_valid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
 
 		resp, err := requests.Delete(url)
-		if err != nil || resp.StatusCode == 204 {
-			fmt.Printf("Message with ID %s has been removed", message_id)
+		if resp.StatusCode == 204 || err != nil {
+			fmt.Printf("Message with ID %s has been removed", args[1])
 		} else {
-			fmt.Printf("ERROR: '%s' message ID doesn't exist. Please check if message exists and try again", message_id)
+			fmt.Printf("ERROR: '%s' message ID doesn't exist. Please check if message exists and try again", args[1])
 		}
 	},
 }

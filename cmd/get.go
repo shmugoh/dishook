@@ -31,6 +31,7 @@ var get_cmd = &cobra.Command{
 	// Long: maybe i won't use it, but i'll leave it here just in case
 
 	Run: func(cmd *cobra.Command, args []string) {
+		// i might move this to root.go
 		flags := []bool{
 			has_avatar_url, is_bot, discriminator, author_id, username_content,
 			message_content, message_id, channel_id,
@@ -46,10 +47,7 @@ var get_cmd = &cobra.Command{
 			"components", "edited_timestamp", "embeds", "flags",
 		}
 
-		url := args[0]
-		message_id := args[1]
-		url = url + "/messages/" + message_id
-
+		url := fmt.Sprintf("%s/messages/%s", args[0], args[1])
 		if !is_token_valid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
