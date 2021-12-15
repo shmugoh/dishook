@@ -102,11 +102,11 @@ func init() {
 //
 // Used when input has no flags set.
 func merge_strings(args []string, arg_pos int) string {
-	var msg string
+	var str string
 	for i := arg_pos; i < len(args); i++ {
-		msg = fmt.Sprintf("%s %s", msg, args[i])
+		str = fmt.Sprintf("%s %s", str, args[i])
 	}
-	return strings.TrimSpace(msg)
+	return strings.TrimSpace(str)
 }
 
 // Semds an HTTP request method to Discord's webhook with provided URL and JSON map.
@@ -128,15 +128,6 @@ func request_HTTP(http_method string, URL string, json_map map[string]string) {
 
 // Checks if provided URL matches the Discord URL webhook API calling one.
 func is_token_valid(url string) bool {
-	defer func() {
-		if err := recover(); err != nil {
-			// what
-			// i might tickle around and see what this does
-			fmt.Printf("ERROR: '%s' is not a valid webhook URL.", url)
-			os.Exit(0)
-		}
-	}()
-
 	if url[0:33] == "https://discord.com/api/webhooks/" {
 		url_r, err := requests.Get(url)
 		url_code := url_r.StatusCode
@@ -147,14 +138,23 @@ func is_token_valid(url string) bool {
 
 	// Passed thru all checks without any true statement
 	return false
+
+	// defer func() {
+	// 	if err := recover(); err != nil {
+	// 		// what
+	// 		// i might tickle around and see what this does
+	// 		fmt.Printf("ERROR: '%s' is not a valid webhook URL.", url)
+	// 		os.Exit(0)
+	// 	}
+	// }()
 }
 
 // Checks if given value doesn't pass set (2000) characters.
 func is_max(msg string) bool {
-	msgLimit := 2000 // you never know if discord may change their
+	msg_limit := 2000 // you never know if discord may change their
 	// limit in the near future /shrug
 
-	if len(msg) < msgLimit {
+	if len(msg) < msg_limit {
 		return false
 	}
 	return true
