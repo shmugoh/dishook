@@ -22,23 +22,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// flags
-var (
-	avatar_url string
-	username   string
-	message    string
-	tts        bool
-)
-
-func init() {
-	executeCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
-	executeCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
-	executeCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
-	executeCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
-	rootCmd.AddCommand(executeCmd)
-}
-
-var executeCmd = &cobra.Command{
+var execute_cmd = &cobra.Command{
 	Use:   "execute [URL] [message]\n  dishook execute [URL]",
 	Short: "Sends the message (with its corresponding flags if called)",
 	Args:  cobra.MinimumNArgs(2),
@@ -51,7 +35,7 @@ var executeCmd = &cobra.Command{
 func execute(args []string) {
 	url := args[0]
 	flags := []string{avatar_url, username, message}
-	if !isTokenValid(url) {
+	if !is_token_valid(url) {
 		fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 	}
 
@@ -62,7 +46,7 @@ func execute(args []string) {
 				fmt.Println("ERROR: Message flag required.")
 				os.Exit(0)
 			}
-			if isMsgMax(message) {
+			if is_max(message) {
 				fmt.Println("ERROR: Message's length surpasses 2000 characters." +
 					"Please make it shorter and try again.")
 				os.Exit(0)
@@ -77,7 +61,7 @@ func execute(args []string) {
 				"avatar_url": avatar_url,
 				"tts":        tts,
 			}
-			requestHTTP("POST", url, json_map)
+			request_HTTP("POST", url, json_map)
 			os.Exit(0)
 		} else {
 			continue
@@ -85,13 +69,13 @@ func execute(args []string) {
 	}
 
 	// No flags zone
-	content := mergeStrings(args, 1)
-	if isMsgMax(content) {
+	content := merge_strings(args, 1)
+	if is_max(content) {
 		fmt.Println("Your message's length surpasses 2000 characters." +
 			"Please make it shorter and try again.")
 	} else {
 		json_map := map[string]string{"content": content}
-		requestHTTP("POST", url, json_map)
+		request_HTTP("POST", url, json_map)
 	}
 
 	// sendMsg(url, content)

@@ -21,13 +21,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func init() {
-	editCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit")
-
-	rootCmd.AddCommand(editCmd)
-}
-
-var editCmd = &cobra.Command{
+var edit_cmd = &cobra.Command{
 	Use:   "edit [URL] [message-id]",
 	Short: "Edits a sent webhook message",
 	Args:  cobra.MinimumNArgs(2),
@@ -40,7 +34,7 @@ var editCmd = &cobra.Command{
 		url = url + "/messages/" + message_id
 		flags := []string{message}
 
-		if !isTokenValid(url) {
+		if !is_token_valid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
 		}
 
@@ -52,14 +46,14 @@ var editCmd = &cobra.Command{
 				}
 
 				json_map := map[string]string{"content": message}
-				requestHTTP("PATCH", url, json_map)
+				request_HTTP("PATCH", url, json_map)
 			} else {
 				continue
 			}
 		}
 
-		content := mergeStrings(args, 2)
+		content := merge_strings(args, 2)
 		json_map := map[string]string{"content": content}
-		requestHTTP("PATCH", url, json_map)
+		request_HTTP("PATCH", url, json_map)
 	},
 }

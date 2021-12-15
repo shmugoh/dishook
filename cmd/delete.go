@@ -22,13 +22,11 @@ import (
 )
 
 func init() {
-	deleteCmd.SetUsageTemplate("\nUsage:\n  delete [URL] [message id]\n") // if i don't use this, usage would end with
-	rootCmd.AddCommand(deleteCmd)                                         // [flags], and deletecmd doesn't use them
-	// rootCmd.SetUsageTemplate("delete [URL] [message-id]")
-
+	delete_cmd.SetUsageTemplate("\nUsage:\n  delete [URL] [message id]\n") // if i don't use this, usage would end with
+	// [flags], and deletecmd doesn't use them
 }
 
-var deleteCmd = &cobra.Command{
+var delete_cmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Removes previously-sent webhook message",
 	Args:  cobra.ExactArgs(2),
@@ -38,7 +36,7 @@ var deleteCmd = &cobra.Command{
 		message_id := args[1]
 		url = url + "/messages/" + message_id
 
-		if !isTokenValid(url) {
+		if !is_token_valid(url) {
 			fmt.Printf("ERROR: '%s' is not a valid webhook token", args[0])
 		}
 

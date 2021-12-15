@@ -11,13 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 package cmd
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -25,8 +25,81 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	// author:map
+	avatar_url string
+	username   string
+	message    string
+	tts        bool
+
+	author_id        bool
+	username_content bool
+	discriminator    bool
+	components       bool
+	message_content  bool
+	channel_id       bool
+	edited_timestamp bool
+	embeds           bool
+	flags            bool
+	message_id       bool
+
+	webhook_type bool
+	webhook_id   bool
+	timestamp    bool
+
+	has_avatar_url    bool
+	is_bot            bool
+	mentions_everyone bool
+	mentions_roles    bool
+	is_pinned         bool
+	has_tts           bool
+)
+
+func init() {
+
+	// Execute Commands
+	execute_cmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
+	execute_cmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
+	execute_cmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
+	execute_cmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
+
+	// Get Commands
+	// json info | author:map
+	get_cmd.Flags().BoolVarP(&has_avatar_url, "avatar-url", "a", false, "Avatar URL of the webhook")
+	get_cmd.Flags().BoolVarP(&is_bot, "bot", "b", false, "Returns if obtained webhook is bot")
+	get_cmd.Flags().BoolVarP(&discriminator, "discriminator", "d", false, "Webhook's discriminator")
+	get_cmd.Flags().BoolVarP(&author_id, "author-id", "", false, "ID of webhook")
+	get_cmd.Flags().BoolVarP(&username_content, "username", "u", false, "Name used for the webhook")
+
+	// message info
+	get_cmd.Flags().BoolVarP(&message_content, "message", "m", false, "Message sent (set to default if no flags are used)")
+	get_cmd.Flags().BoolVarP(&message_id, "message-id", "s", false, "Message ID")
+	get_cmd.Flags().BoolVarP(&channel_id, "channel-id", "c", false, "Channel ID")
+
+	get_cmd.Flags().BoolVarP(&mentions_everyone, "mentions-everyone", "e", false, "Returns if everyone is mentioned")
+	get_cmd.Flags().BoolVarP(&mentions_roles, "mention-roles", "r", false, "Returns if roles are mentioned")
+	get_cmd.Flags().BoolVarP(&is_pinned, "pinned", "p", false, "Returns if message is pinned")
+	get_cmd.Flags().BoolVarP(&timestamp, "timestamp", "", false, "Returns the time message was sent")
+	get_cmd.Flags().BoolVarP(&has_tts, "tts", "t", false, "Returns if TTS was used")
+
+	// webhook info
+	get_cmd.Flags().BoolVarP(&webhook_id, "webhook-id", "", false, "Webhook's ID")
+	get_cmd.Flags().BoolVarP(&webhook_type, "webhook-type", "", false, "Webhook type")
+
+	// misc
+	get_cmd.Flags().BoolVarP(&components, "components", "", false, "Components included with the message")
+	get_cmd.Flags().BoolVarP(&edited_timestamp, "edited-timestamp", "", false, "Time when message was edited")
+	get_cmd.Flags().BoolVarP(&embeds, "embeds", "", false, "Array of message embeds/components")
+	get_cmd.Flags().BoolVarP(&flags, "flags", "", false, "Name of the webhook")
+
+	// Edit Command (lol)
+	edit_cmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit")
+
+	root_cmd.AddCommand(get_cmd, execute_cmd, edit_cmd, delete_cmd)
+}
+
 // Merges all the strings that start from given argument position into one variable.
-func mergeStrings(args []string, arg_location int) string {
+func merge_strings(args []string, arg_location int) string {
 	var msg string
 	for i := arg_location; i < len(args); i++ {
 		msg = msg + " " + args[i]
@@ -39,7 +112,7 @@ func mergeStrings(args []string, arg_location int) string {
 // Automatically marshalls the JSON map.
 //
 // Supported HTTP Methods: POST, PATCH
-func requestHTTP(HttpMethod string, URL string, JsonMap map[string]string) {
+func request_HTTP(HttpMethod string, URL string, JsonMap map[string]string) {
 	jsonValue, _ := json.Marshal(JsonMap)
 
 	switch HttpMethod {
@@ -53,7 +126,7 @@ func requestHTTP(HttpMethod string, URL string, JsonMap map[string]string) {
 }
 
 // Checks if provided URL matches the Discord URL webhook API calling one.
-func isTokenValid(url string) bool {
+func is_token_valid(url string) bool {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Printf("ERROR: '%s' is not a valid webhook URL.", url)
@@ -75,7 +148,7 @@ func isTokenValid(url string) bool {
 }
 
 // Checks if message argument doesn't pass 2000 characters.
-func isMsgMax(msg string) bool {
+func is_max(msg string) bool {
 	msgLen := len(msg)
 	msgLimit := 2000 // you never know if discord may change their
 	// limit in the near future /shrug
@@ -93,17 +166,15 @@ func isMsgMax(msg string) bool {
 
 // Panics when an error ocurrs. Only use if no conditionals are being used or if it's a HTTPS request.
 func ManageError(err error) {
-	// just to calm down with the syntax
 	if err != nil {
 		fmt.Println("An unexpected error ocurred. Please try again.")
-		fmt.Println("For more information:")
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
 // Cobra stuff
 
-var rootCmd = &cobra.Command{
+var root_cmd = &cobra.Command{
 	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
 	Args: cobra.MinimumNArgs(2),
 
@@ -119,7 +190,7 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
+	if err := root_cmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
