@@ -21,6 +21,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/fatih/color"
 	"github.com/jochasinga/requests"
 	"github.com/spf13/cobra"
 )
@@ -127,7 +128,8 @@ func request_HTTP(http_method string, URL string, json_map map[string]string) {
 	}
 }
 
-// Checks if provided URL matches the Discord URL webhook API calling one.
+// Checks if provided URL matches
+// Discord's webhook API URL.
 func is_token_valid(url string) bool {
 	if url[0:33] == "https://discord.com/api/webhooks/" {
 		url_r, err := requests.Get(url)
@@ -144,27 +146,30 @@ func is_token_valid(url string) bool {
 	// 	if err := recover(); err != nil {
 	// 		// what
 	// 		// i might tickle around and see what this does
-	// 		fmt.Printf("ERROR: '%s' is not a valid webhook URL.", url)
+	// 		fmt.Printf("'%s' is not a valid webhook URL.", url)
 	// 		os.Exit(0)
 	// 	}
 	// }()
 }
 
-// Checks if given value doesn't pass set (2000) characters.
-func is_max(msg string) bool {
-	msg_limit := 2000
-	return len(msg) >= msg_limit
-}
+// Checks if given value doesn't pass set limit (2000).
+func is_max(msg string) bool { return len(msg) >= 2000 }
 
-// Panics when an error ocurrs. Only use if no conditionals are being used or if it's a HTTPS request.
+// Panics when an error is given.
+//
+// Error value is first parsed by fmt.Errorf(), then a red-colored
+// ERROR string is merged with the given value.
+//
+// Example: return fmt.Errorf("message flag required") -> ERROR: message flag required
 func ManageError(err error) {
 	if err != nil {
-		log.Fatal(err)
-		fmt.Println("An unexpected error ocurred. Please try again.")
+		red := color.New(color.FgRed).Sprintf("ERROR:")
+		log.SetFlags(0)
+		log.Fatal(fmt.Errorf("%s %s", red, err))
 	}
 }
 
-// Cobra stuff
+// Automatically refers to execute() or help if no argument is parsed.
 var root_cmd = &cobra.Command{
 	Use:  "dishook [url] [message]\n  dishook [url] [flags]",
 	Args: cobra.MinimumNArgs(2),
@@ -172,18 +177,27 @@ var root_cmd = &cobra.Command{
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			cmd.Help()
+			// return fmt.Errorf("no arguments given")
 		}
 		return nil
 	},
 
-	Run: func(cmd *cobra.Command, args []string) {
-		execute(args)
+	RunE: func(cmd *cobra.Command, args []string) error {
+		url := args[0]
+		if !is_token_valid(url) {
+			ManageError(fmt.Errorf("'%s' not a valid webhook token", args[0]))
+		}
+
+		err := execute(args)
+		ManageError(err)
+
+		return nil
 	},
 }
 
 func Execute() {
 	if err := root_cmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		// fmt.Fprintln(os.Stderr, err)
+		os.Exit(0)
 	}
 }
