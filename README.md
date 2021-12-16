@@ -6,14 +6,14 @@ copying and pasting code, then trying to fix it, you could run this one simple ~
 
 # Automatic Installation
 
-## Windows (W.I.P)
+## Windows
 **1.** Open PowerShell with administrator privilages.
 
 **2.** Run `Get-ExecutionPolicy`. If it returns `Restricted`, run `Set-ExecutionPolicy AllSigned`.
 
 **3.** 
 ```powershell
-iwr -useb [SCRIPT_URL] | iex
+iwr -useb https://raw.githubusercontent.com/juanpisuribe13/Dishook/main/bin/install.ps1 | iex
 ```
 
 ## Linux
