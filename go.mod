@@ -1,7 +1,7 @@
 require (
+	github.com/fatih/color v1.13.0
 	github.com/jochasinga/requests v0.0.0-20160909035013-af9bbdb4ab2c
 	github.com/spf13/cobra v1.3.0
-	github.com/fatih/color v1.13.0
 )
 
 require (
