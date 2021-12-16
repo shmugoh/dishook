@@ -17,6 +17,7 @@ jobs:
         system: [ubuntu-latest, windows-latest, macOS-latest]
   
     steps:
+    - name: Switch Branch
     - uses: actions/checkout@v2
       with:
         ref: 'syntax-rewrite'
@@ -31,3 +32,10 @@ jobs:
 
     - name: Build
       run: go build -v ./...
+    
+    - name: Create Pull Request
+    - uses: peter-evans/create-pull-request@v3
+      with:
+        branch: syntax-rewrite
+        title: 'GitHub Actions Testing'
+        draft: false
