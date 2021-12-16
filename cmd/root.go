@@ -57,42 +57,42 @@ var (
 
 func init() {
 	// Execute Commands
-	execute_cmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
-	execute_cmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
-	execute_cmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
-	execute_cmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
+	execute_cmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "sets webhook's profile picture")
+	execute_cmd.Flags().StringVarP(&message, "message", "m", "", "sets message")
+	execute_cmd.Flags().StringVarP(&username, "username", "u", "", "sets username of webhook")
+	execute_cmd.Flags().BoolVarP(&tts, "tts", "t", false, "sets if tts should be enabled or not")
 
 	// Get Commands
 	// json info | author:map
-	get_cmd.Flags().BoolVarP(&has_avatar_url, "avatar-url", "a", false, "Avatar URL of the webhook")
-	get_cmd.Flags().BoolVarP(&is_bot, "bot", "b", false, "Returns if obtained webhook is bot")
-	get_cmd.Flags().BoolVarP(&discriminator, "discriminator", "d", false, "Webhook's discriminator")
-	get_cmd.Flags().BoolVarP(&author_id, "author-id", "", false, "ID of webhook")
-	get_cmd.Flags().BoolVarP(&username_content, "username", "u", false, "Name used for the webhook")
+	get_cmd.Flags().BoolVarP(&has_avatar_url, "avatar-url", "a", false, "avatar link of the webhook")
+	get_cmd.Flags().BoolVarP(&is_bot, "bot", "b", false, "returns if obtained webhook is bot")
+	get_cmd.Flags().BoolVarP(&discriminator, "discriminator", "d", false, "returns discriminator")
+	get_cmd.Flags().BoolVarP(&author_id, "author-id", "", false, "returns ID of webhook")
+	get_cmd.Flags().BoolVarP(&username_content, "username", "u", false, "name used for webhook")
 
 	// message info
-	get_cmd.Flags().BoolVarP(&message_content, "message", "m", false, "Message sent (set to default if no flags are used)")
-	get_cmd.Flags().BoolVarP(&message_id, "message-id", "s", false, "Message ID")
-	get_cmd.Flags().BoolVarP(&channel_id, "channel-id", "c", false, "Channel ID")
+	get_cmd.Flags().BoolVarP(&message_content, "message", "m", false, "message sent")
+	get_cmd.Flags().BoolVarP(&message_id, "message-id", "s", false, "message ID")
+	get_cmd.Flags().BoolVarP(&channel_id, "channel-id", "c", false, "channel ID")
 
-	get_cmd.Flags().BoolVarP(&mentions_everyone, "mentions-everyone", "e", false, "Returns if everyone is mentioned")
-	get_cmd.Flags().BoolVarP(&mentions_roles, "mention-roles", "r", false, "Returns if roles are mentioned")
-	get_cmd.Flags().BoolVarP(&is_pinned, "pinned", "p", false, "Returns if message is pinned")
-	get_cmd.Flags().BoolVarP(&timestamp, "timestamp", "", false, "Returns the time message was sent")
-	get_cmd.Flags().BoolVarP(&has_tts, "tts", "t", false, "Returns if TTS was used")
+	get_cmd.Flags().BoolVarP(&mentions_everyone, "mentions-everyone", "e", false, "returns if everyone is mentioned")
+	get_cmd.Flags().BoolVarP(&mentions_roles, "mention-roles", "r", false, "returns if roles are mentioned")
+	get_cmd.Flags().BoolVarP(&is_pinned, "pinned", "p", false, "returns if message is pinned")
+	get_cmd.Flags().BoolVarP(&timestamp, "timestamp", "", false, "returns the time webhook was executed")
+	get_cmd.Flags().BoolVarP(&has_tts, "tts", "t", false, "returns if TTS was used")
 
 	// webhook info
-	get_cmd.Flags().BoolVarP(&webhook_id, "webhook-id", "", false, "Webhook's ID")
+	get_cmd.Flags().BoolVarP(&webhook_id, "webhook-id", "", false, "webhook ID")
 	get_cmd.Flags().BoolVarP(&webhook_type, "webhook-type", "", false, "Webhook type")
 
 	// misc
-	get_cmd.Flags().BoolVarP(&components, "components", "", false, "Components included with the message")
-	get_cmd.Flags().BoolVarP(&edited_timestamp, "edited-timestamp", "", false, "Time when message was edited")
-	get_cmd.Flags().BoolVarP(&embeds, "embeds", "", false, "Array of message embeds/components")
-	get_cmd.Flags().BoolVarP(&flags, "flags", "", false, "Name of the webhook")
+	get_cmd.Flags().BoolVarP(&components, "components", "", false, "components included with the message")
+	get_cmd.Flags().BoolVarP(&edited_timestamp, "edited-timestamp", "", false, "time when message was edited")
+	get_cmd.Flags().BoolVarP(&embeds, "embeds", "", false, "array of message embeds/components")
+	get_cmd.Flags().BoolVarP(&flags, "flags", "", false, "name of webhook")
 
 	// Edit Command (lol)
-	edit_cmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna edit")
+	edit_cmd.Flags().StringVarP(&message, "message", "m", "", "sets message you wanna edit")
 
 	root_cmd.AddCommand(get_cmd, execute_cmd, edit_cmd, delete_cmd)
 }
