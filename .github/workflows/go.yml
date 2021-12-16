@@ -31,9 +31,7 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: |
-        go build -v ./...
-        dir
+      run: go build -v ./... | dir
     
     - name: Publish
     - uses: "marvinpinto/action-automatic-releases@latest"
