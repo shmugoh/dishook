@@ -16,7 +16,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -24,36 +23,37 @@ import (
 
 var execute_cmd = &cobra.Command{
 	Use:   "execute [URL] [message]\n  dishook execute [URL]",
-	Short: "Sends the message (with its corresponding flags if called)",
+	Short: "Sends message and/or arguments to Discord",
 	Args:  cobra.MinimumNArgs(2),
 
-	Run: func(cmd *cobra.Command, args []string) {
-		execute(args)
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		url := args[0]
+		if !is_token_valid(url) {
+			return fmt.Errorf("ERROR: '%s' is not a valid webhook token", args[0])
+		}
+		return nil
+	},
+
+	RunE: func(cmd *cobra.Command, args []string) error {
+		buff := execute(args)
+		if buff != nil {
+			return buff
+		}
+		return nil
 	},
 }
 
-func execute(args []string) {
+func execute(args []string) error {
 	url := args[0]
 	flags := []string{avatar_url, username, message}
-	if !is_token_valid(url) {
-		fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
-	}
-
-	// Flags zone
 	for i := 0; i < len(flags); i++ {
 		if len(flags[i]) != 0 {
 			if len(message) == 0 {
-				fmt.Println("ERROR: Message flag required.")
-				os.Exit(0)
+				return fmt.Errorf("ERROR: message flag required")
 			}
 			if is_max(message) {
-				fmt.Println("ERROR: Message's length surpasses 2000 characters." +
-					"Please make it shorter and try again.")
-				os.Exit(0)
+				return fmt.Errorf("ERROR: message's length surpasses 2000 characters")
 			}
-			// TODO: create a handling error script
-			// the one golang provides isn't good ux-wise
-
 			tts := strconv.FormatBool(tts)
 			json_map := map[string]string{
 				"content":    message,
@@ -61,22 +61,19 @@ func execute(args []string) {
 				"avatar_url": avatar_url,
 				"tts":        tts,
 			}
+
 			request_HTTP("POST", url, json_map)
-			os.Exit(0)
-		} else {
-			continue
+			return nil
 		}
 	}
 
-	// No flags zone
+	// If flags are NOT used
 	content := merge_strings(args, 1)
-	if is_max(content) {
-		fmt.Println("Your message's length surpasses 2000 characters." +
-			"Please make it shorter and try again.")
-	} else {
+	if !is_max(content) {
 		json_map := map[string]string{"content": content}
 		request_HTTP("POST", url, json_map)
+	} else {
+		return fmt.Errorf("ERROR: message's length surpasses 2000 characters")
 	}
-
-	// sendMsg(url, content)
+	return nil
 }
