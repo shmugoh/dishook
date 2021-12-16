@@ -31,13 +31,9 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -v ./...
+      run: go build -v
     
-    - uses: actions/checkout@v2
-    
-    - name: Make changes to pull request
-      run: date +%s > report.txt
-
+    - name: Publish
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
