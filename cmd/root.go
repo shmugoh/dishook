@@ -155,7 +155,7 @@ func is_token_valid(url string) bool {
 // Checks if given value doesn't pass set limit (2000).
 func is_max(msg string) bool { return len(msg) >= 2000 }
 
-// Panics when an error is given.
+// Panics when an non-nil error is given.
 //
 // Error value is first parsed by fmt.Errorf(), then a red-colored
 // ERROR string is merged with the given value.
