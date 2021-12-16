@@ -21,6 +21,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Automatically refers to execute()
 var execute_cmd = &cobra.Command{
 	Use:   "execute [URL] [message]\n  dishook execute [URL]",
 	Short: "Sends message and/or arguments to Discord",
@@ -29,30 +30,35 @@ var execute_cmd = &cobra.Command{
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		url := args[0]
 		if !is_token_valid(url) {
-			return fmt.Errorf("ERROR: '%s' is not a valid webhook token", args[0])
+			return fmt.Errorf("'%s' not a valid webhook token", args[0])
 		}
 		return nil
 	},
 
 	RunE: func(cmd *cobra.Command, args []string) error {
-		buff := execute(args)
-		if buff != nil {
-			return buff
+		err := execute(args)
+		if err != nil {
+			ManageError(err)
 		}
 		return nil
 	},
 }
 
+// Executes Discord Webhook.
+//
+// Available flags are "content", "username", "avatar_url" and "tts" (bool) and are parsed to a map[string].
+//
+// If no flags are parsed, execute will automatically resort to parse "content".
 func execute(args []string) error {
 	url := args[0]
 	flags := []string{avatar_url, username, message}
 	for i := 0; i < len(flags); i++ {
 		if len(flags[i]) != 0 {
 			if len(message) == 0 {
-				return fmt.Errorf("ERROR: message flag required")
+				return fmt.Errorf("message flag required")
 			}
 			if is_max(message) {
-				return fmt.Errorf("ERROR: message's length surpasses 2000 characters")
+				return fmt.Errorf("message length surpasses 2000 character limit")
 			}
 			tts := strconv.FormatBool(tts)
 			json_map := map[string]string{
@@ -73,7 +79,7 @@ func execute(args []string) error {
 		json_map := map[string]string{"content": content}
 		request_HTTP("POST", url, json_map)
 	} else {
-		return fmt.Errorf("ERROR: message's length surpasses 2000 characters")
+		return fmt.Errorf("message length surpasses 2000 character limit")
 	}
 	return nil
 }

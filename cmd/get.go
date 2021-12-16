@@ -23,6 +23,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// Sends a GET request to Discord webhook with given message ID and returns JSON (map)
+//
+// When a flag or two are parsed, get_cmd will select the corresponding variables
+// (has_avatar_url -> "avatar") and return it to the user.
+//
+// Available flags: avatar, bot, discriminator, id, username, message_content,
+// message_id, channel_id, mentions_everyone, mentiones_roles, is_pinned, timestamp,
+// has_tts, webhook_id, webhook_type, components, edited_timestamp, embeds, flags
+//
+// If no flag is parsed, get_cmd will proceed to print out the entire returned JSON map.
 var get_cmd = &cobra.Command{
 	Use:   "get [URL] [message-id]",
 	Short: "Returns info of a message sent by a webhook",
@@ -33,7 +43,7 @@ var get_cmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		url := fmt.Sprintf("%s/messages/%s", args[0], args[1])
 		if !is_token_valid(url) {
-			return fmt.Errorf("ERROR: '%s' is not a valid webhook token", args[0])
+			ManageError(fmt.Errorf("'%s' not a valid webhook token", args[0]))
 		}
 		resp_json, err := requests.Get(url)
 		ManageError(err)
