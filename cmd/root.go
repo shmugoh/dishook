@@ -26,7 +26,6 @@ import (
 )
 
 var (
-	// author:map
 	avatar_url string
 	username   string
 	message    string
@@ -56,7 +55,6 @@ var (
 )
 
 func init() {
-
 	// Execute Commands
 	execute_cmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
 	execute_cmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
@@ -98,7 +96,9 @@ func init() {
 	root_cmd.AddCommand(get_cmd, execute_cmd, edit_cmd, delete_cmd)
 }
 
-// Allocates all strings from array starting from given argument position into one variable.
+// Allocates all strings from array starting from
+// given argument position into one variable with
+// blank spaces
 //
 // Used when input has no flags set.
 func merge_strings(args []string, arg_pos int) string {
@@ -109,7 +109,8 @@ func merge_strings(args []string, arg_pos int) string {
 	return strings.TrimSpace(str)
 }
 
-// Semds an HTTP request method to Discord's webhook with provided URL and JSON map.
+// Semds an HTTP request method to Discord's webhook
+// with provided URL and JSON map.
 // Automatically marshalls the JSON map.
 //
 // Supported HTTP Methods: POST, PATCH
@@ -151,20 +152,15 @@ func is_token_valid(url string) bool {
 
 // Checks if given value doesn't pass set (2000) characters.
 func is_max(msg string) bool {
-	msg_limit := 2000 // you never know if discord may change their
-	// limit in the near future /shrug
-
-	if len(msg) < msg_limit {
-		return false
-	}
-	return true
+	msg_limit := 2000
+	return len(msg) >= msg_limit
 }
 
 // Panics when an error ocurrs. Only use if no conditionals are being used or if it's a HTTPS request.
 func ManageError(err error) {
 	if err != nil {
-		fmt.Println("An unexpected error ocurred. Please try again.")
 		log.Fatal(err)
+		fmt.Println("An unexpected error ocurred. Please try again.")
 	}
 }
 
@@ -179,6 +175,7 @@ var root_cmd = &cobra.Command{
 		}
 		return nil
 	},
+
 	Run: func(cmd *cobra.Command, args []string) {
 		execute(args)
 	},
