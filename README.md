@@ -1,20 +1,39 @@
-# Dishook (Alpha)
-Dishook is an universal CLI Discord webhook manager (or executer) written in Golang. It's fast and very efficient.
+# Dishook
+Dishook is an efficient CLI Discord webhook executor written in Golang.
 
-It saves you a lot of time - instead of downloading a programming language, installing the correct libraries, 
-copying and pasting code, then trying to fix it, you could run a simple command to avoid wasting a huge amount of time.
+It helps save the user time - instead of downloading a programming language, installing the correct libraries, 
+copying and pasting code, then trying to fix it, you could run this one simple ~~trick~~ command instead!
 
-## Manual Installation
+# Automatic Installation
+
+## Windows (W.I.P)
+**1.** Open PowerShell with administrator privilages.
+
+**2.** Run `Get-ExecutionPolicy`. If it returns `Restricted`, run `Set-ExecutionPolicy AllSigned`.
+
+**3.** 
+```powershell
+iwr -useb [SCRIPT_URL] | iex
+```
+
+## Linux
+
+```bash
+cd /usr/bin && { sudo curl -L -O https://github.com/juanpisuribe13/Dishook/releases/latest/download/dishook; sudo chmod +x dishook; cd -; }
+```
+
+# Manual Installation
 
 **1.** Go to the repository's [latest release](https://github.com/juanpisuribe13/Dishook/releases/latest).
 
 **2.** Download the executable. If you have a hard time telling which one is for your operating system, 
 .exe is for Windows and the one without a file type is Linux.
 
-**3.** Move the executable to your operating system's PATH. For Windows, it is C:\Windows. For Linux, /usr/bin.
+**3.** Move the executable to your operating system's PATH.
 
-**3.1.** If you're on Windows and don't feel comfortable moving it to your system folder, open cmd, run `set PATH` and 
-pick which folder you're comfortable putting it on.
+**Windows:** Run `set PATH` and pick whichever folder you're comfortable putting it on.
+
+**Linux:** /usr/bin
 
 **4.** Done!
 
@@ -22,20 +41,15 @@ pick which folder you're comfortable putting it on.
 
 ### Dishook is an invalid command, what do I do?
 
-Check if dishook is already in your system's path. If it is, open a new command line window and try again.
+Check if dishook is already in your system's path. If it is, start a new terminal session and try again.
 
 ### How do I use this?
 
-Open a new command-line window, and type in `dishook -h` to get started.
+Open your terminal of choice and type in `dishook -h` to get started.
 
-### As any other CLI app, will arguments/flags be implemented?
+### There's a lot of names out there and you picked Dishook; there's a lot of projects with that name. Why?
 
-Yep! If you wanna know which arguments/flags will be implemented, refer to Projects.
-
-### There's a lot of names out there and you choosed Dishook, even if there's a lot of projects with that name. Why?
-
-Dishook fits perfectly for a CLI argument/app. Typing something like `discordwebhook` takes a lot of
-time and looks weird. Dishook is easier to remember and takes less time to write.
+Memory Muscle, and something like `discord-webhook` would look weird in terminal.
 
 # Contributing
 
