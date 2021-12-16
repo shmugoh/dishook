@@ -27,9 +27,8 @@ func init() {
 
 var delete_cmd = &cobra.Command{
 	Use:   "delete",
-	Short: "Removes previously-sent webhook message",
+	Short: "Removes sent webhook message",
 	Args:  cobra.ExactArgs(2),
-
 	Run: func(cmd *cobra.Command, args []string) {
 		url := fmt.Sprintf("%s/messages/%s", args[0], args[1])
 		if !is_token_valid(url) {
@@ -38,9 +37,9 @@ var delete_cmd = &cobra.Command{
 
 		resp, err := requests.Delete(url)
 		if resp.StatusCode == 204 || err != nil {
-			fmt.Printf("Message with ID %s has been removed", args[1])
+			fmt.Printf("Message ID %s removed", args[1])
 		} else {
-			fmt.Printf("ERROR: '%s' message ID doesn't exist. Please check if message exists and try again", args[1])
+			fmt.Printf("ERROR: '%s' message ID not found", args[1])
 		}
 	},
 }
