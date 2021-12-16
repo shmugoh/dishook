@@ -54,8 +54,8 @@ var get_cmd = &cobra.Command{
 			"webhook_id", "wh_type",
 			"components", "edited_timestamp", "embeds", "flags",
 		}
-		var is_flag_set bool
 
+		var is_flag_set bool
 		for i := 0; i < len(flags_map_bool); i++ {
 			if flags_map_bool[i] {
 				output := resp_map[flags_map_var[i]]
