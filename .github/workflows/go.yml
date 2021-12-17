@@ -52,7 +52,9 @@ jobs:
     - name: Build and Publish - Windows
       if: ${{ matrix.system == 'windows-latest' }}
       run: go build -ldflags "-w" -v dishook | ls
-    - uses: actions/upload-release-asset@v1
+    - name: Publish - Windows
+      if: ${{ matrix.system == 'windows-latest' }}
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -61,10 +63,13 @@ jobs:
         asset_name: dishook.exe
         asset_content_type: application/tar+gzip
 
-    - name: Build and Publish - macOS
+
+    - name: Build - macOS
       if: ${{ matrix.system == 'macOS-latest' }}
       run: go build -ldflags "-w" -v dishook-macos | ls
-    - uses: actions/upload-release-asset@v1
+    - name: Publish - macOS
+      if: ${{ matrix.system == 'macOS-latest' }}
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -73,10 +78,13 @@ jobs:
         asset_name: dishook-macos
         asset_content_type: application/tar+gzip
           
-    - name: Build and Publish - Linux
+          
+    - name: Build - Linux
       if: ${{ matrix.system == 'ubuntu-latest' }}
       run: go build -ldflags "-w" -v dishook | ls
-    - uses: actions/upload-release-asset@v1
+    - name: Publish - Linux
+      if: ${{ matrix.system == 'macOS-latest' }}
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
