@@ -32,11 +32,6 @@ jobs:
 
     - name: Build
       run: go build -v dishook
-    
-    - uses: actions/checkout@v2
-    
-    - name: Make changes to pull request
-      run: date +%s > report.
       
     - name: scan 
       run: dir
