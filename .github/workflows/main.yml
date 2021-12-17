@@ -1,0 +1,90 @@
+name: Compile & Publish
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'     
+        required: true
+      changelog:
+        description: 'Changelog'     
+        required: false
+  push:
+    branches:
+      - syntax-rewrite
+  pull_request:
+    branches:
+      - syntax-rewrite
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Switch Branch
+      uses: actions/checkout@v2
+      with:
+        ref: 'syntax-rewrite'
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17.5
+    - name: Download dependencies
+      run: go mod download
+      
+    - name: Publish release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        release_name: ${{ github.event.inputs.version }}
+        draft: false
+        prerelease: false
+        
+      
+    - name: Build - Windows x64 Binary
+      env:
+        GOOS: windows
+        GOARCH: amd64
+      run: go build -ldflags "-w" -v dishook_amd64
+      
+      
+    - name: Build - macOS x64 Binary
+      env:
+        GOOS: darwin
+        GOARCH: amd64
+      run: go build -ldflags "-w" -v dishook_darwin_amd64 -o ./bin
+  
+  
+    - name: Build - Linux x64 Binary
+      env:
+        GOOS: linux
+        GOARCH: amd64
+      run: go build -ldflags "-w" -v dishook_amd64 -o ./bin
+      
+    - name: Build - Linux x86 Binary
+      env:
+        GOOS: linux
+        GOARCH: 386
+      run: go build -ldflags "-w" -v dishook_386 -o ./bin
+      
+    - name: Build - Linux ARM64 Binary
+      env:
+        GOOS: linux
+        GOARCH: arm64
+      run: go build -ldflags "-w" -v dishook_arm64 -o ./bin
+      
+    - name: Build - Linux ARM Binary
+      env:
+        GOOS: linux
+        GOARCH: arm
+      run: go build -ldflags "-w" -v dishook_arm -o ./bin
+      
+    - name: Publish
+      uses: alexellis/upload-assets@0.3.0
+      env:
+        token: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        asset_paths: '["./bin/*"]'
+        
+    
