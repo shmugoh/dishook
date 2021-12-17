@@ -5,9 +5,10 @@ on:
       version:
         description: 'Version'     
         required: true
-      changelog:
-        description: 'Changelog'     
-        required: false
+      pre_release:
+        type: boolean
+        description: Pre-Release?
+      
   push:
     branches:
       - syntax-rewrite
@@ -43,7 +44,7 @@ jobs:
         release_name: ${{ github.event.inputs.version }}
         body_path: ./release_changelog
         draft: false
-        prerelease: false
+        prerelease: $${{ github.event.inputs.pre_release }}
         
       
     - name: Build - Windows x64 Binary
