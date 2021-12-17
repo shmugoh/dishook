@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.system }}
     strategy:
       matrix:
-        system: [ubuntu-latest, windows-latest, macOS-latest]
+        system: [ubuntu-latest, macOS-latest]
   
     steps:
     - name: Switch Branch
@@ -31,16 +31,12 @@ jobs:
       run: go mod download
 
     - name: Build
-      run: go build -v dishook
-      
-    - name: scan 
-      run: dir
+      run: go build -v dishook | ls
 
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: "latest"
-        prerelease: true
         title: "Development Build"
         files: |
           dishook
