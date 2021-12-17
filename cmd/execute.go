@@ -16,60 +16,50 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/spf13/cobra"
 )
 
-// flags
-var (
-	avatar_url string
-	username   string
-	message    string
-	tts        bool
-)
-
-func init() {
-	executeCmd.Flags().StringVarP(&avatar_url, "avatar-url", "a", "", "Sets the webhook's profile picture")
-	executeCmd.Flags().StringVarP(&message, "message", "m", "", "Sets the message you wanna send")
-	executeCmd.Flags().StringVarP(&username, "username", "u", "", "Sets the username of the webhook")
-	executeCmd.Flags().BoolVarP(&tts, "tts", "t", false, "Sets if tts should be enabled or not")
-	rootCmd.AddCommand(executeCmd)
-}
-
-var executeCmd = &cobra.Command{
+// Automatically refers to execute()
+var execute_cmd = &cobra.Command{
 	Use:   "execute [URL] [message]\n  dishook execute [URL]",
-	Short: "Sends the message (with its corresponding flags if called)",
+	Short: "Sends message and/or arguments to Discord",
 	Args:  cobra.MinimumNArgs(2),
 
-	Run: func(cmd *cobra.Command, args []string) {
-		execute(args)
+	PreRunE: func(cmd *cobra.Command, args []string) error {
+		url := args[0]
+		if !is_token_valid(url) {
+			return fmt.Errorf("'%s' not a valid webhook token", args[0])
+		}
+		return nil
+	},
+
+	RunE: func(cmd *cobra.Command, args []string) error {
+		err := execute(args)
+		if err != nil {
+			ManageError(err)
+		}
+		return nil
 	},
 }
 
-func execute(args []string) {
+// Executes Discord Webhook.
+//
+// Available flags are "content", "username", "avatar_url" and "tts" (bool) and are parsed to a map[string].
+//
+// If no flags are parsed, execute will automatically resort to parse "content".
+func execute(args []string) error {
 	url := args[0]
 	flags := []string{avatar_url, username, message}
-	if !isTokenValid(url) {
-		fmt.Printf("ERROR: '%s' is not a valid webhook token.", args[0])
-	}
-
-	// Flags zone
 	for i := 0; i < len(flags); i++ {
 		if len(flags[i]) != 0 {
 			if len(message) == 0 {
-				fmt.Println("ERROR: Message flag required.")
-				os.Exit(0)
+				return fmt.Errorf("message flag required")
 			}
-			if isMsgMax(message) {
-				fmt.Println("ERROR: Message's length surpasses 2000 characters." +
-					"Please make it shorter and try again.")
-				os.Exit(0)
+			if is_max(message) {
+				return fmt.Errorf("message length surpasses 2000 character limit")
 			}
-			// TODO: create a handling error script
-			// the one golang provides isn't good ux-wise
-
 			tts := strconv.FormatBool(tts)
 			json_map := map[string]string{
 				"content":    message,
@@ -77,22 +67,19 @@ func execute(args []string) {
 				"avatar_url": avatar_url,
 				"tts":        tts,
 			}
-			requestHTTP("POST", url, json_map)
-			os.Exit(0)
-		} else {
-			continue
+
+			request_HTTP("POST", url, json_map)
+			return nil
 		}
 	}
 
-	// No flags zone
-	content := mergeStrings(args, 1)
-	if isMsgMax(content) {
-		fmt.Println("Your message's length surpasses 2000 characters." +
-			"Please make it shorter and try again.")
-	} else {
+	// If flags are NOT used
+	content := merge_strings(args, 1)
+	if !is_max(content) {
 		json_map := map[string]string{"content": content}
-		requestHTTP("POST", url, json_map)
+		request_HTTP("POST", url, json_map)
+	} else {
+		return fmt.Errorf("message length surpasses 2000 character limit")
 	}
-
-	// sendMsg(url, content)
+	return nil
 }

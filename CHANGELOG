@@ -3,12 +3,29 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-## [0.2.3] - 2021-10-21
+## 2021-12-16
+### Added
+- New error handling system
+    - Drastically improves UX and code quality
+    - Uses colors
+- Better documentation
+
+### Changed
+- _get_ now returns the entire JSON if no flag is parsed 
+- Drastically improves error handling
+- Commands are now parsed in _root.go_
+- Variable naming scheme
+- Spelling mistakes
+
+### Fixed
+- Running dishook with no arguments now show the help menu
+---
+## 2021-10-21
 ### Changed
 - Execute command is now independent
 - Internal code cleanup
-
-## [0.2.2] - 2021-06-12
+---
+## 2021-06-12
 ### Added
 - Flags have been added. Flags let the user customize their message (for execute and edit), and obtain transparent information about their webhook's message.
     - For root (execute): avatar-url, message, username, and tts.
@@ -17,8 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Delete command now requires 2 exact arguments instead of maximum 2 args.
-
-## [0.2.1] - 2021-06-11
+---
+## 2021-06-11
 ### Added
 - Delete, edit, and get webhook functions have been implemented.
 - Function to process the message flag has been implemented
@@ -26,8 +43,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 - Message proccesing in root.go has been moved to a function.
-
-## [0.2.0] - 2021-06-11
+---
+## 2021-06-11
 ### Added
 - Changelog file (wooo!).
 - isTokenValid() can now check if URL argument isn't an URL.
