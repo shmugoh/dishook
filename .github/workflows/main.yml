@@ -30,14 +30,14 @@ jobs:
     - name: Download dependencies
       run: go mod download
       
-    - name: Publish release
+    - name: Create Release
       id: create_release
       uses: actions/create-release@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.event.inputs.version }}
-        release_name: ${{ github.event.inputs.version }}
+        tag_name: ${{ steps.tags.outputs.tag }}
+        release_name: ${{ steps.tags.outputs.tag }}
         draft: false
         prerelease: false
         
@@ -79,11 +79,69 @@ jobs:
         GOARCH: arm
       run: go build -ldflags "-w" -v -o ./bin/dishook_arm
       
-    - name: Publish
-      uses: alexellis/upload-assets@0.3.0
+  
+    - name: Upload Windows amd64
+      id: upload-win_amd64
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        asset_paths: '["./bin/*"]'
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_amd64.exe
+        asset_name: dishook_amd64.exe
+        asset_content_type: application/tar+gzip
         
-    
+    - name: Upload Darwin amd64
+      id: upload-darwin_amd64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_darwin_amd64
+        asset_name: dishook_darwin_amd64
+        asset_content_type: application/tar+gzip
+        
+    - name: Upload Linux amd64
+      id: upload-linux_amd64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_amd64
+        asset_name: dishook_amd64
+        asset_content_type: application/tar+gzip
+
+    - name: Upload Linux i386
+      id: upload-linux_i386
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_386
+        asset_name: dishook_386
+        asset_content_type: application/tar+gzip
+  
+    - name: Upload Linux ARM64
+      id: upload-linux_ARM64
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_arm64
+        asset_name: dishook_arm64
+        asset_content_type: application/tar+gzip
+        
+    - name: Upload Linux ARM
+      id: upload-linux_ARM
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/dishook_arm
+        asset_name: dishook_arm
+        asset_content_type: application/tar+gzip
