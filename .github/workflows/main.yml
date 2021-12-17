@@ -46,7 +46,7 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64.exe
       
       
     - name: Build - macOS x64 Binary
