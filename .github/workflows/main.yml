@@ -46,39 +46,38 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -ldflags "-w" -v dishook_amd64
+      run: go build -ldflags "-w" -v ./bin/dishook_amd64
       
       
     - name: Build - macOS x64 Binary
       env:
         GOOS: darwin
         GOARCH: amd64
-      run: go build -ldflags "-w" -v dishook_darwin_amd64 -o ./bin
-  
+      run: go build -ldflags "-w" -v -o ./bin/dishook_darwin_amd64
   
     - name: Build - Linux x64 Binary
       env:
         GOOS: linux
         GOARCH: amd64
-      run: go build -ldflags "-w" -v dishook_amd64 -o ./bin
+      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64
       
     - name: Build - Linux x86 Binary
       env:
         GOOS: linux
         GOARCH: 386
-      run: go build -ldflags "-w" -v dishook_386 -o ./bin
+      run: go build -ldflags "-w" -v -o ./bin/dishook_386
       
     - name: Build - Linux ARM64 Binary
       env:
         GOOS: linux
         GOARCH: arm64
-      run: go build -ldflags "-w" -v dishook_arm64 -o ./bin
+      run: go build -ldflags "-w" -v -o ./bin/dishook_arm64
       
     - name: Build - Linux ARM Binary
       env:
         GOOS: linux
         GOARCH: arm
-      run: go build -ldflags "-w" -v dishook_arm -o ./bin
+      run: go build -ldflags "-w" -v -o ./bin/dishook_arm
       
     - name: Publish
       uses: alexellis/upload-assets@0.3.0
