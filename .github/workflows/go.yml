@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.system }}
     strategy:
       matrix:
-        system: [ubuntu-latest, macOS-latest]
+        system: [ubuntu-latest, windows-latest, macOS-latest]
   
     steps:
     - name: Switch Branch
@@ -29,10 +29,32 @@ jobs:
         
     - name: Download dependencies
       run: go mod download
+      
+    - name: Build and Publish - Windows
+      if: ${{ matrix.system == 'windows-latest' }}
+      run: go build -ldflags "-w" -v dishook | ls
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        title: "Development Build"
+        files: |
+          dishook.exe
 
-    - name: Build
-      run: go build -v dishook | ls
-
+    - name: Build and Publish - macOS
+      if: ${{ matrix.system == 'macOS-latest' }}
+      run: go build -ldflags "-w" -v dishook-macos | ls
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        title: "Development Build"
+        files: |
+          dishook-macos
+          
+    - name: Build and Publish - Linux
+      if: ${{ matrix.system == 'ubuntu-latest' }}
+      run: go build -ldflags "-w" -v dishook | ls
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -40,3 +62,6 @@ jobs:
         title: "Development Build"
         files: |
           dishook
+          
+    
+    
