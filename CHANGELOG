@@ -1,21 +1,21 @@
-# Changelog
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## 2021-12-16
 ### Added
+- macOS (x86_64) and Linux i386/ARM/ARM64 support!
 - New error handling system
-    - Drastically improves UX and code quality
+    - Drastically improve UX and code quality
     - Uses colors
-- Better documentation
+- Automatic installation commands now featured in README.md 
+- Improved documentation
 
 ### Changed
 - _get_ now returns the entire JSON if no flag is parsed 
-- Drastically improves error handling
-- Commands are now parsed in _root.go_
-- Variable naming scheme
-- Spelling mistakes
+- Commands are now parsed in _root_
+- Variable naming scheme has changed
+- Spelling mistakes have been fixed
 
 ### Fixed
 - Running dishook with no arguments now show the help menu
