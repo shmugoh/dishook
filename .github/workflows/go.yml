@@ -10,6 +10,28 @@ on:
       - syntax-rewrite
 
 jobs:
+
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read info
+        id: tags
+        shell: bash
+        run: |
+          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
+          echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
+
+      - name: Publish release
+        id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tags.outputs.tag }}
+          release_name: ${{ steps.tags.outputs.tag }}
+          draft: false
+          prerelease: false
+      
   compile:
     runs-on: ${{ matrix.system }}
     strategy:
@@ -33,35 +55,37 @@ jobs:
     - name: Build and Publish - Windows
       if: ${{ matrix.system == 'windows-latest' }}
       run: go build -ldflags "-w" -v dishook | ls
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        title: "Development Build"
-        files: |
-          dishook.exe
+        upload_url: ${{ jobs.create_release.steps.create_release.outputs.upload_url }}
+        asset_path: ./dishook.exe
+        asset_name: dishook.exe
+        asset_content_type: application/tar+gzip
 
     - name: Build and Publish - macOS
       if: ${{ matrix.system == 'macOS-latest' }}
       run: go build -ldflags "-w" -v dishook-macos | ls
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        title: "Development Build"
-        files: |
-          dishook-macos
+        upload_url: ${{ jobs.create_release.steps.create_release.outputs.upload_url }}
+        asset_path: ./dishook-macos
+        asset_name: dishook-macos
+        asset_content_type: application/tar+gzip
           
     - name: Build and Publish - Linux
       if: ${{ matrix.system == 'ubuntu-latest' }}
       run: go build -ldflags "-w" -v dishook | ls
-    - uses: "marvinpinto/action-automatic-releases@latest"
+    - uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        title: "Development Build"
-        files: |
-          dishook
-          
+        upload_url: ${{ jobs.create_release.steps.create_release.outputs.upload_url }}
+        asset_path: ./dishook
+        asset_name: dishook
+        asset_content_type: application/tar+gzip
     
     
