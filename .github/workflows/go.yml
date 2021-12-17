@@ -39,6 +39,7 @@ jobs:
       run: go mod download
 
     - name: Publish release
+      if: ${{ matrix.system == 'ubuntu-latest' }}
       id: create_release
       uses: actions/create-release@master
       env:
@@ -83,7 +84,7 @@ jobs:
       if: ${{ matrix.system == 'ubuntu-latest' }}
       run: go build -ldflags "-w" -v dishook | ls
     - name: Publish - Linux
-      if: ${{ matrix.system == 'macOS-latest' }}
+      if: ${{ matrix.system == 'ubuntu-latest' }}
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
