@@ -44,7 +44,7 @@ jobs:
         release_name: ${{ github.event.inputs.version }}
         body_path: ./release_changelog
         draft: false
-        prerelease: $${{ github.event.inputs.pre_release }}
+        prerelease: ${{ github.event.inputs.pre_release }}
         
       
     - name: Build - Windows x64 Binary
