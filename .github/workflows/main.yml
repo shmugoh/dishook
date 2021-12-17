@@ -30,6 +30,9 @@ jobs:
     - name: Download dependencies
       run: go mod download
       
+    - name: Grab CHANGELOG
+      run: sed '1,/## 2021-12-16/d;/'---'/Q' CHANGELOG >> release_changelog
+      
     - name: Create Release
       id: create_release
       uses: actions/create-release@master
@@ -38,6 +41,7 @@ jobs:
       with:
         tag_name: ${{ github.event.inputs.version }}
         release_name: ${{ github.event.inputs.version }}
+        body_path: ./release_changelog
         draft: false
         prerelease: false
         
