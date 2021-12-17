@@ -18,6 +18,10 @@ on:
 jobs:
   setup-repo:
     runs-on: ubuntu-latest
+    
+    outputs:
+      url: ${{ steps.create_release.outputs.upload_url }}
+    
     steps:
     - name: Switch Branch
       uses: actions/checkout@v2
@@ -93,7 +97,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_amd64.exe
             asset_name: dishook_amd64.exe
             asset_content_type: application/tar+gzip
@@ -104,7 +108,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_darwin_amd64
             asset_name: dishook_darwin_amd64
             asset_content_type: application/tar+gzip
@@ -115,7 +119,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_amd64
             asset_name: dishook_amd64
             asset_content_type: application/tar+gzip
@@ -126,7 +130,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_386
             asset_name: dishook_386
             asset_content_type: application/tar+gzip
@@ -137,7 +141,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_arm64
             asset_name: dishook_arm64
             asset_content_type: application/tar+gzip
@@ -148,7 +152,7 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           with:
-            upload_url: ${{ setup-repo.steps.create_release.outputs.upload_url }}
+            upload_url: ${{ needs.setup-repo.outputs.url }}
             asset_path: ./bin/dishook_arm
             asset_name: dishook_arm
             asset_content_type: application/tar+gzip
