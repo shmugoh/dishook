@@ -1,7 +1,14 @@
 name: Compile & Publish
-
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'     
+        required: true
+      changelog:
+        description: 'Changelog'     
+        required: true
+
   push:
     branches:
       - syntax-rewrite
@@ -10,34 +17,13 @@ on:
       - syntax-rewrite
 
 jobs:
-
-  create_release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Read info
-        id: tags
-        shell: bash
-        run: |
-          echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\/v/}
-          echo ::set-output name=TAG::${GITHUB_REF/refs\/tags\//}
-
-      - name: Publish release
-        id: create_release
-        uses: actions/create-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tags.outputs.tag }}
-          release_name: ${{ steps.tags.outputs.tag }}
-          draft: false
-          prerelease: false
-      
   compile:
+  
     runs-on: ${{ matrix.system }}
     strategy:
       matrix:
         system: [ubuntu-latest, windows-latest, macOS-latest]
-  
+
     steps:
     - name: Switch Branch
       uses: actions/checkout@v2
@@ -51,6 +37,17 @@ jobs:
         
     - name: Download dependencies
       run: go mod download
+
+    - name: Publish release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+        release_name: ${{ github.event.inputs.version }}
+        draft: false
+        prerelease: false
       
     - name: Build and Publish - Windows
       if: ${{ matrix.system == 'windows-latest' }}
