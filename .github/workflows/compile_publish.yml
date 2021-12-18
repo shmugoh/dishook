@@ -144,6 +144,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_arm
-        asset_name: dishook_arm
+        asset_path: ./bin/dishook_Linux_arm
+        asset_name: dishook_Linux_arm
         asset_content_type: application/tar+gzip
