@@ -20,35 +20,34 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64.exe
-      
+      run: go build -ldflags "-w" -v -o ./bin/dishook.exe
       
     - name: Build - macOS x64 Binary
       env:
         GOOS: darwin
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_darwin_amd64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Darwin_x86_64
   
     - name: Build - Linux x64 Binary
       env:
         GOOS: linux
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_x86_64
       
     - name: Build - Linux x86 Binary
       env:
         GOOS: linux
         GOARCH: 386
-      run: go build -ldflags "-w" -v -o ./bin/dishook_386
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_i386
       
     - name: Build - Linux ARM64 Binary
       env:
         GOOS: linux
         GOARCH: arm64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_arm64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_arm64
       
     - name: Build - Linux ARM Binary
       env:
         GOOS: linux
         GOARCH: arm
-      run: go build -ldflags "-w" -v -o ./bin/dishook_arm
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_arm

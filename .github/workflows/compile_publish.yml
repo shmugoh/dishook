@@ -1,4 +1,5 @@
-name: Compile & Publish
+name: Compile & Ship
+
 on:
   workflow_dispatch:
     inputs:
@@ -21,13 +22,10 @@ jobs:
       run: go mod download
       
     - name: Grab CHANGELOG
-
       env:
         DATE_BUILD: ${{ github.event.inputs.version }}
-
       if: ${{ pre_release == false }}
       run: sed '1,/## $DATE_BUILD/d;/'---'/Q' CHANGELOG >> release_changelog
-  
       if: ${{ pre_release == true }}
       run: echo nightly_build_$DATE_BUILD >> release_changelog
       
@@ -48,38 +46,38 @@ jobs:
       env:
         GOOS: windows
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64.exe
+      run: go build -ldflags "-w" -v -o ./bin/dishook.exe
       
       
     - name: Build - macOS x64 Binary
       env:
         GOOS: darwin
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_darwin_amd64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Darwin_x86_64
   
     - name: Build - Linux x64 Binary
       env:
         GOOS: linux
         GOARCH: amd64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_amd64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_x86_64
       
     - name: Build - Linux x86 Binary
       env:
         GOOS: linux
         GOARCH: 386
-      run: go build -ldflags "-w" -v -o ./bin/dishook_386
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_i386
       
     - name: Build - Linux ARM64 Binary
       env:
         GOOS: linux
         GOARCH: arm64
-      run: go build -ldflags "-w" -v -o ./bin/dishook_arm64
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_arm64
       
     - name: Build - Linux ARM Binary
       env:
         GOOS: linux
         GOARCH: arm
-      run: go build -ldflags "-w" -v -o ./bin/dishook_arm
+      run: go build -ldflags "-w" -v -o ./bin/dishook_Linux_arm
       
   
     - name: Upload Windows amd64
@@ -89,8 +87,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_amd64.exe
-        asset_name: dishook_amd64.exe
+        asset_path: ./bin/dishook.exe
+        asset_name: dishook.exe
         asset_content_type: application/tar+gzip
         
     - name: Upload Darwin amd64
@@ -100,8 +98,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_darwin_amd64
-        asset_name: dishook_darwin_amd64
+        asset_path: ./bin/dishook_Darwin_x86_64
+        asset_name: dishook_Darwin_x86_64
         asset_content_type: application/tar+gzip
         
     - name: Upload Linux amd64
@@ -111,8 +109,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_amd64
-        asset_name: dishook_amd64
+        asset_path: ./bin/dishook_Linux_x86_64
+        asset_name: dishook_Linux_x86_64
         asset_content_type: application/tar+gzip
 
     - name: Upload Linux i386
@@ -122,8 +120,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_386
-        asset_name: dishook_386
+        asset_path: ./bin/dishook_Linux_i386
+        asset_name: dishook_Linux_i386
         asset_content_type: application/tar+gzip
   
     - name: Upload Linux ARM64
@@ -133,12 +131,12 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./bin/dishook_arm64
+        asset_path: ./bin/dishook_Linux_arm64
         asset_name: dishook_arm64
         asset_content_type: application/tar+gzip
         
     - name: Upload Linux ARM
-      id: upload-linux_ARM
+      id: upload-linux_Linux_ARM
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
