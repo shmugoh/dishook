@@ -3,20 +3,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - syntax-rewrite
-  pull_request:
-    branches:
-      - syntax-rewrite
+      - master
 
 jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
-    - name: Switch Branch
-      uses: actions/checkout@v2
-      with:
-        ref: 'syntax-rewrite'
-        
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
