@@ -1,4 +1,6 @@
 # Dishook
+[![Build](https://github.com/juanpisuribe13/dishook/actions/workflows/compile_test.yml/badge.svg?branch=master)](https://github.com/juanpisuribe13/dishook/actions/workflows/compile_test.yml)
+
 Dishook is an efficient CLI Discord webhook executor written in Golang.
 
 It helps save the user time - instead of downloading a programming language, installing the correct libraries, 
