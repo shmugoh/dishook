@@ -16,10 +16,10 @@ copying and pasting code, then trying to fix it, you could run this one simple ~
 iwr -useb https://raw.githubusercontent.com/juanpisuribe13/dishook/master/bin/install.ps1 | iex
 ```
 
-## Linux
+## macOS & Linux
 
 ```bash
-cd /usr/bin && { sudo curl -L -O https://github.com/juanpisuribe13/dishook/releases/latest/download/dishook; sudo chmod +x dishook; cd -; }
+curl -L -O https://raw.githubusercontent.com/juanpisuribe13/dishook/master/bin/install.sh; sudo chmod +x install.sh; sudo ./install.sh
 ```
 
 # Manual Installation
