@@ -9,12 +9,17 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
+    - name: Switch Branch
+      uses: actions/checkout@v2
+      with:
+        ref: 'master'
+
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
         go-version: 1.17.5
     - name: Download dependencies
-      run: ls | go mod download
+      run: go mod download
       
     - name: Build - Windows x64 Binary
       env:
