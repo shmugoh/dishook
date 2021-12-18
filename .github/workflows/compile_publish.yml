@@ -8,7 +8,7 @@ on:
         required: true
       pre_release:
         type: boolean
-        description: Pre-Release?
+        description: Nightly Build
 
 jobs:
   compile:
