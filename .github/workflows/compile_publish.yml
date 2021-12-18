@@ -29,9 +29,9 @@ jobs:
     - name: Grab CHANGELOG
       env:
         DATE_BUILD: ${{ github.event.inputs.version }}
-      if: ${{ pre_release == false }}
+      if: ${{ github.event.inputs.pre_release == false }}
       run: sed '1,/## $DATE_BUILD/d;/'---'/Q' CHANGELOG >> release_changelog
-      if: ${{ pre_release == true }}
+      if: ${{ github.event.inputs.pre_release == true }}
       run: echo nightly_build_$DATE_BUILD >> release_changelog
       
     - name: Create Release
