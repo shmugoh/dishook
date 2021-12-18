@@ -26,13 +26,17 @@ jobs:
     - name: Download dependencies
       run: go mod download
       
-    - name: Grab CHANGELOG
+    - name: Grab Changelog
       env:
         DATE_BUILD: ${{ github.event.inputs.version }}
       if: ${{ github.event.inputs.pre_release == false }}
       run: sed '1,/## $DATE_BUILD/d;/'---'/Q' CHANGELOG >> release_changelog
+
+    - name: Grab Nightly Changelog
+      env:
+        DATE_BUILD: ${{ github.event.inputs.version }}
       if: ${{ github.event.inputs.pre_release == true }}
-      run: echo nightly_build_$DATE_BUILD >> release_changelog
+          run: echo nightly_build_$DATE_BUILD >> release_changelog
       
     - name: Create Release
       id: create_release
