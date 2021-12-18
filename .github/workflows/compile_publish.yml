@@ -14,6 +14,11 @@ jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
+    - name: Switch Branch
+      uses: actions/checkout@v2
+      with:
+        ref: 'master'
+
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
