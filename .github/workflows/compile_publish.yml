@@ -8,22 +8,11 @@ on:
       pre_release:
         type: boolean
         description: Pre-Release?
-      
-  push:
-    branches:
-      - syntax-rewrite
-  pull_request:
-    branches:
-      - syntax-rewrite
 
 jobs:
   compile:
     runs-on: ubuntu-latest
     steps:
-    - name: Switch Branch
-      uses: actions/checkout@v2
-      with:
-        ref: 'syntax-rewrite'
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
@@ -32,7 +21,15 @@ jobs:
       run: go mod download
       
     - name: Grab CHANGELOG
-      run: sed '1,/## 2021-12-16/d;/'---'/Q' CHANGELOG >> release_changelog
+
+      env:
+        DATE_BUILD: ${{ github.event.inputs.version }}
+
+      if: ${{ pre_release == false }}
+      run: sed '1,/## $DATE_BUILD/d;/'---'/Q' CHANGELOG >> release_changelog
+  
+      if: ${{ pre_release == true }}
+      run: echo nightly_build_$DATE_BUILD >> release_changelog
       
     - name: Create Release
       id: create_release
