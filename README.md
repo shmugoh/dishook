@@ -13,18 +13,18 @@ copying and pasting code, then trying to fix it, you could run this one simple ~
 
 **3.** 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/juanpisuribe13/Dishook/main/bin/install.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/juanpisuribe13/dishook/master/bin/install.ps1 | iex
 ```
 
 ## Linux
 
 ```bash
-cd /usr/bin && { sudo curl -L -O https://github.com/juanpisuribe13/Dishook/releases/latest/download/dishook; sudo chmod +x dishook; cd -; }
+cd /usr/bin && { sudo curl -L -O https://github.com/juanpisuribe13/dishook/releases/latest/download/dishook; sudo chmod +x dishook; cd -; }
 ```
 
 # Manual Installation
 
-**1.** Go to the repository's [latest release](https://github.com/juanpisuribe13/Dishook/releases/latest).
+**1.** Go to the repository's [latest release](https://github.com/juanpisuribe13/dishook/releases/latest).
 
 **2.** Download the executable. If you have a hard time telling which one is for your operating system, 
 .exe is for Windows and the one without a file type is Linux.
@@ -57,4 +57,4 @@ If you see that the code's messy, something doesn't work, or I left something du
 free to send a pull request and I'll review it!
 
 # License
-[Apache License 2.0](https://raw.githubusercontent.com/juanpisuribe13/Dishook/main/LICENSE)
+[Apache License 2.0](https://raw.githubusercontent.com/juanpisuribe13/dishook/master/LICENSE)
